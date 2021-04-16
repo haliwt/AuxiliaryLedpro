@@ -56,9 +56,10 @@ void MX_GPIO_Init(void)
                           , GPIO_PIN_RESET);
 
   /*Configure GPIOB pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, LEDBPWM_Pin|LEDCPWM_Pin
-                          |LEDDPWM_Pin|LEDCON_LR_Pin, GPIO_PIN_RESET);
-
+  HAL_GPIO_WritePin(GPIOB, LEDCPWM_Pin|LEDDPWM_Pin|LEDCON_LR_Pin, GPIO_PIN_RESET);
+   
+   
+   //GPIO Initinal 
   /*Configure GPIOC pin : LEDD3_Pin */
   GPIO_InitStruct.Pin = LEDD3_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -77,30 +78,17 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIOA pin : LEDA1_Pin */
-  GPIO_InitStruct.Pin = LEDA1_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LEDA1_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIOB pins : LEDA7_Pin LEDA8_Pin LEDBPWM_Pin LEDB4_Pin
                            LEDB5_Pin LEDB6_Pin LEDB7_Pin */
-  GPIO_InitStruct.Pin = LEDBPWM_Pin|LEDCPWM_Pin
-                          |LEDDPWM_Pin|LEDCON_LR_Pin;
+  GPIO_InitStruct.Pin = LEDCPWM_Pin|LEDDPWM_Pin|LEDCON_LR_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : LEDBCUT_Pin */
-  GPIO_InitStruct.Pin = LEDCON_LR_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LEDCON_LR_GPIO_Port, &GPIO_InitStruct);
-  
-
+ 
+  //USART AFx Function Define GPIO
   /*Configure GPIO pin : PB7  --AF0 USART1 */
   GPIO_InitStruct.Pin = GPIO_PIN_7;
   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
@@ -109,7 +97,7 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Alternate = GPIO_AF0_USART1;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 	
-	/*Configure GPIO pin : PB6 */
+  /*Configure GPIO pin : PB6 */
   GPIO_InitStruct.Pin = GPIO_PIN_6;
   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;

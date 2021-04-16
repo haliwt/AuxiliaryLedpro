@@ -25,6 +25,8 @@ void SingleLed_Test(void)
 				
 				TheFirstGroup_SingleLEDA();
 				TheSecondGroup_SingleLEDB();
+				TheThirdGroup_SingleLEDC();
+				TheFourthGroup_SingleLEDD();
 				LR_Control(ledab.led_by_d);
 			}
 		}
@@ -41,7 +43,7 @@ void SingleLed_Test(void)
 ******************************************************************************/
 void TheFirstGroup_SingleLEDA(void)
 {
-        if (ledab.led_by_a > 8)
+        if (ledab.led_by_a > 4)
         {
           TurnOff_TheFirstLedA();
 		
@@ -52,57 +54,73 @@ void TheFirstGroup_SingleLEDA(void)
             {
 
 			case 0:
-					TurnOff_TheFirstLedA();
+				 TurnOff_TheFirstLedA();
 				
 			break;
 			
 			case 1:
 			    ledab.led_by_b = 0;
+			    ledab.led_by_c =0;
+			    ledab.led_by_d =0 ;
 				TurnOff_TheSecondLedB();
+			    TurnOff_TheThirdLedC();
+			    TurnOff_TheFourthLedD();
 				HAL_Delay(100);
                 TurnOff_TheFirstLedA();
 				HAL_Delay(100);
 				//1.turn on LEDA1 =1
-			   HAL_GPIO_WritePin(LEDA1_GPIO_Port, LEDA1_Pin, GPIO_PIN_SET);
+			    HAL_GPIO_WritePin(LEDA1_GPIO_Port, LEDA1_Pin, GPIO_PIN_SET);
 			   //2.EN on
-                HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2) ;
+                HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3) ;
                 
                 break;
 
             case 2:
 				ledab.led_by_b = 0;
+			    ledab.led_by_c =0;
+			    ledab.led_by_d =0 ;
 				TurnOff_TheSecondLedB();
+			    TurnOff_TheThirdLedC();
+			    TurnOff_TheFourthLedD();
 				HAL_Delay(100);
 	
 				TurnOff_TheFirstLedA();
 								HAL_Delay(100);
                 //turn on LEDA2  
                 HAL_GPIO_WritePin(LEDA2_GPIO_Port, LEDA2_Pin, GPIO_PIN_SET);
-				 HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2) ;
+				 HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3) ;
                 break;
 
             case 3:
 				ledab.led_by_b = 0;
+			    ledab.led_by_c =0;
+			    ledab.led_by_d =0 ;
 				TurnOff_TheSecondLedB();
+			    TurnOff_TheThirdLedC();
+			    TurnOff_TheFourthLedD();
 				HAL_Delay(100);
 				TurnOff_TheFirstLedA();
 				HAL_Delay(100);
                 //turn on LEDA3
                 HAL_GPIO_WritePin(LEDA3_GPIO_Port, LEDA3_Pin, GPIO_PIN_SET);
 				//2. enable
-				 HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2) ;
+				 HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3) ;
                 break;
 
             case 4:
 				ledab.led_by_b = 0;
+			    ledab.led_by_c =0;
+			    ledab.led_by_d =0 ;
 				TurnOff_TheSecondLedB();
+			    TurnOff_TheThirdLedC();
+			    TurnOff_TheFourthLedD();
 				HAL_Delay(100);
 				TurnOff_TheFirstLedA();
 				HAL_Delay(100);
                 //turn on LEDA4
                 HAL_GPIO_WritePin(LEDA4_GPIO_Port, LEDA4_Pin, GPIO_PIN_SET);
 			    //2 .EN
-				 HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2) ;
+				 HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3) ;
                 break;
 			}
         }
@@ -119,13 +137,13 @@ void TheFirstGroup_SingleLEDA(void)
 void TheSecondGroup_SingleLEDB(void)
 {
 
-	if (ledab.led_by_b> 8)
+	if (ledab.led_by_b> 1)
 	{
 		TurnOff_TheSecondLedB();
 			
-		}
-        else
-        {
+	}
+    else
+     {
 			switch (ledab.led_by_b)
 			{
 			case 0:
@@ -135,25 +153,20 @@ void TheSecondGroup_SingleLEDB(void)
 
             case 1:
 				ledab.led_by_a = 0;
+			    ledab.led_by_c =0;
+			    ledab.led_by_d =0 ;
 				TurnOff_TheFirstLedA();
+			    TurnOff_TheThirdLedC();
+			    TurnOff_TheFourthLedD();
 				HAL_Delay(100);
 				TurnOff_TheSecondLedB();
 				HAL_Delay(100);
 				//1.turn on LEDB1 =1
                
-				 HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);
+				 HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1);
                 break;
 
-            case 2:
-				ledab.led_by_a = 0;
-				TurnOff_TheFirstLedA();
-				HAL_Delay(100);
-				TurnOff_TheSecondLedB();
-				HAL_Delay(100);
-
-				//turn on LEDB1
-                HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);
-                break;
+           
 			}
         }
  }
@@ -167,7 +180,7 @@ void TheSecondGroup_SingleLEDB(void)
 ******************************************************************************/
  void TheThirdGroup_SingleLEDC(void)
  {
-	if (ledab.led_by_c> 8)
+	if (ledab.led_by_c> 1)
 	{
 		TurnOff_TheThirdLedC();
 			
@@ -177,27 +190,26 @@ void TheSecondGroup_SingleLEDB(void)
 			switch (ledab.led_by_c)
 			{
 			case 0:
-				 TurnOff_TheThirdLedC();
-				 HAL_TIM_PWM_Stop(&htim1,TIM_CHANNEL_2);
+				  TurnOff_TheThirdLedC();
+				  
 				 break;
 
             case 1: //the third group only Pwm control  //PB3 --TIM1-CH2 -AF1
 				ledab.led_by_a = 0;
 			    ledab.led_by_b =0;
-			    ledab.led_by_d = 0 ;
-				TurnOff_TheFirstLedA();
-				HAL_Delay(100);
+			    ledab.led_by_d =0 ;
 				TurnOff_TheSecondLedB();
+			    TurnOff_TheFirstLedA();
+			    TurnOff_TheFourthLedD();
+				HAL_Delay(100);
+				TurnOff_TheThirdLedC();
 				HAL_Delay(100);
 				//1.turn on LEDB1 =1
                
 				 HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);
                 break;
 
-            default:
-				
-                HAL_TIM_PWM_Stop(&htim1,TIM_CHANNEL_2);
-                break;
+          
 			}
         }
  
@@ -213,34 +225,32 @@ void TheSecondGroup_SingleLEDB(void)
 ******************************************************************************/
 void TheFourthGroup_SingleLEDD(void)
 {
-	if (ledab.led_by_b> 8)
+	if (ledab.led_by_d> 4)
 	{
-		TurnOff_TheSecondLedB();
-		TurnOff_TheFirstLedA();
-        TurnOff_TheThirdLedC();		
+		
+        TurnOff_TheFourthLedD();		
 		}
         else
         {
-			switch (ledab.led_by_b)
+			switch (ledab.led_by_d)
 			{
 			case 0:
-					TurnOff_TheSecondLedB();
-					TurnOff_TheFirstLedA();
-					TurnOff_TheThirdLedC();
-				
-				 break;
+				TurnOff_TheFourthLedD();
+			break;
 
             case 1:
 				ledab.led_by_a = 0;
 			    ledab.led_by_b = 0;
 			    ledab.led_by_c = 0;
 				TurnOff_TheFirstLedA();
-				HAL_Delay(100);
-				TurnOff_TheSecondLedB();
+			    TurnOff_TheSecondLedB();
+			    TurnOff_TheThirdLedC();
+			    HAL_Delay(100);
+	            TurnOff_TheFourthLedD();
 				HAL_Delay(100);
 				//1.turn on LEDB1 =1
                  HAL_GPIO_WritePin(LEDD1_GPIO_Port, LEDD1_Pin, GPIO_PIN_SET);
-				 HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);
+				 HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
                 break;
 
             case 2:
@@ -248,13 +258,15 @@ void TheFourthGroup_SingleLEDD(void)
 			    ledab.led_by_b = 0;
 			    ledab.led_by_c = 0;
 				TurnOff_TheFirstLedA();
-				HAL_Delay(100);
-				TurnOff_TheSecondLedB();
+			    TurnOff_TheSecondLedB();
+			    TurnOff_TheThirdLedC();
+			    HAL_Delay(100);
+	            TurnOff_TheFourthLedD();
 				HAL_Delay(100);
 
 				//turn on LEDB1
 				HAL_GPIO_WritePin(LEDD2_GPIO_Port, LEDD2_Pin, GPIO_PIN_SET);
-                HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);
+                HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
                 break;
 			
 			  case 3:
@@ -262,13 +274,15 @@ void TheFourthGroup_SingleLEDD(void)
 			    ledab.led_by_b = 0;
 			    ledab.led_by_c = 0;
 				TurnOff_TheFirstLedA();
-				HAL_Delay(100);
-				TurnOff_TheSecondLedB();
+			    TurnOff_TheSecondLedB();
+			    TurnOff_TheThirdLedC();
+			    HAL_Delay(100);
+	            TurnOff_TheFourthLedD();
 				HAL_Delay(100);
 
 				//turn on LEDB1
 				HAL_GPIO_WritePin(LEDD3_GPIO_Port, LEDD3_Pin, GPIO_PIN_SET);
-                HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);
+                HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
                 break;
 			  
 			    case 4:
@@ -276,13 +290,15 @@ void TheFourthGroup_SingleLEDD(void)
 			    ledab.led_by_b = 0;
 			    ledab.led_by_c = 0;
 				TurnOff_TheFirstLedA();
-				HAL_Delay(100);
-				TurnOff_TheSecondLedB();
+			    TurnOff_TheSecondLedB();
+			    TurnOff_TheThirdLedC();
+			    HAL_Delay(100);
+	            TurnOff_TheFourthLedD();
 				HAL_Delay(100);
 
 				//turn on LEDB1
 				HAL_GPIO_WritePin(LEDD4_GPIO_Port, LEDD4_Pin, GPIO_PIN_SET);
-                HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);
+                HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
                 break;
 			}
         }
@@ -321,7 +337,7 @@ void LR_Control(uint8_t fanval)
 /*************************************************************************
  	*
 	*Function Name:void TurnOff_TheFirstLedA(void)
-	*Function : 
+	*Function : PA2 -> TIM2_CH3
 	*Input Ref: NO
 	*Output Ref:No
 	*
@@ -329,7 +345,7 @@ void LR_Control(uint8_t fanval)
 void TurnOff_TheFirstLedA(void)
 {
      //turn off LEDA LED
-	   HAL_TIM_PWM_Stop(&htim2,TIM_CHANNEL_2) ; //HAL_GPIO_WritePin(LEDAPWM_GPIO_Port, LEDAPWM_Pin, GPIO_PIN_RESET);//TIM2_CH2
+	   HAL_TIM_PWM_Stop(&htim2,TIM_CHANNEL_3) ; //HAL_GPIO_WritePin(LEDAPWM_GPIO_Port, LEDAPWM_Pin, GPIO_PIN_RESET);//TIM2_CH2
 	   HAL_Delay(200);
 	   HAL_GPIO_WritePin(GPIOA, LEDA1_Pin | LEDA2_Pin | LEDA3_Pin | LEDA4_Pin , GPIO_PIN_RESET);
       
@@ -338,7 +354,7 @@ void TurnOff_TheFirstLedA(void)
 /*************************************************************************
  	*
 	*Function Name:void TurnOff_TheSecondLedB(void)
-	*Function : 
+	*Function : PA15->TIM2_CH1
 	*Input Ref: NO
 	*Output Ref:No
 	*
@@ -346,23 +362,37 @@ void TurnOff_TheFirstLedA(void)
 void TurnOff_TheSecondLedB(void)
 {
 		 //turn off LEDB LED
-		 HAL_TIM_PWM_Stop(&htim1,TIM_CHANNEL_2);//TIM1_CH2 --PB3//HAL_GPIO_WritePin(LEDBPWM_GPIO_Port, LEDBPWM_Pin, GPIO_PIN_RESET);
+		 HAL_TIM_PWM_Stop(&htim2,TIM_CHANNEL_1);//TIM1_CH2 --PB3//HAL_GPIO_WritePin(LEDBPWM_GPIO_Port, LEDBPWM_Pin, GPIO_PIN_RESET);
 		 HAL_Delay(200);
 	
 }
-
+/*************************************************************************
+ 	*
+	*Function Name:void TurnOff_TheThirdLedC(void)
+	*Function : PB3->TIM1-CH2
+	*Input Ref: NO
+	*Output Ref:No
+	*
+******************************************************************************/
 void TurnOff_TheThirdLedC(void)
 {
-	//turn off LEDB LED
-		 HAL_TIM_PWM_Stop(&htim1,TIM_CHANNEL_2);//TIM1_CH2 --PB3//HAL_GPIO_WritePin(LEDBPWM_GPIO_Port, LEDBPWM_Pin, GPIO_PIN_RESET);
-		 HAL_Delay(200);
+	//turn off LEDC LED
+	HAL_TIM_PWM_Stop(&htim1,TIM_CHANNEL_2);//TIM1_CH2 --PB3//HAL_GPIO_WritePin(LEDBPWM_GPIO_Port, LEDBPWM_Pin, GPIO_PIN_RESET);
+	HAL_Delay(200);
 
 }
-
-void TunrOff_TheFourthLedD(void)
+/*************************************************************************
+ 	*
+	*Function Name:void TunrOff_TheFourthLedD(void)
+	*Function : PB4->TIM3_CH1
+	*Input Ref: NO
+	*Output Ref:No
+	*
+******************************************************************************/
+void TurnOff_TheFourthLedD(void)
 {
 	 //turn off LEDA LED
-	  HAL_TIM_PWM_Stop(&htim2,TIM_CHANNEL_2) ; //HAL_GPIO_WritePin(LEDAPWM_GPIO_Port, LEDAPWM_Pin, GPIO_PIN_RESET);//TIM2_CH2
+	  HAL_TIM_PWM_Stop(&htim3,TIM_CHANNEL_1) ; //HAL_GPIO_WritePin(LEDAPWM_GPIO_Port, LEDAPWM_Pin, GPIO_PIN_RESET);//TIM2_CH2
 	  HAL_Delay(200);
      HAL_GPIO_WritePin(GPIOA, LEDD1_Pin | LEDD2_Pin | LEDD4_Pin , GPIO_PIN_RESET);
 	 HAL_GPIO_WritePin(GPIOC, LEDD3_Pin , GPIO_PIN_RESET);

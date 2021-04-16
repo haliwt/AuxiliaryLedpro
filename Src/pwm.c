@@ -3,8 +3,15 @@
 
 TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim2;
+TIM_HandleTypeDef htim3;
 
-/* TIM1 init function */
+/*************************************************************************************
+*	*
+*Function Name:void MX_TIM1_Init(void)
+*Function:Timer 1 define and frequency set PB3->TIM1_CH2-AF1
+*
+*	
+**************************************************************************************/
 void MX_TIM1_Init(void)
 {
   TIM_ClockConfigTypeDef sClockSourceConfig = {0};
@@ -73,7 +80,7 @@ void MX_TIM1_Init(void)
 /*************************************************************************************
 *	*
 *Function Name:void MX_TIM2_Init(void)
-*Function:Timer 2 define and frequency set
+*Function:Timer 2 define and frequency set  PA15 --> TIM2_CH1-ETR, PA2->TIM2_CH3
 *
 *	
 **************************************************************************************/
@@ -81,9 +88,10 @@ void MX_TIM2_Init(void)
 {
   TIM_ClockConfigTypeDef sClockSourceConfig = {0};
   TIM_MasterConfigTypeDef sMasterConfig = {0};
-  TIM_OC_InitTypeDef sConfigOC = {0};
-
-  htim2.Instance =TIM2 ; //TIM3;
+  TIM_OC_InitTypeDef sConfigOC_1 = {0}; //PA15 -TIM2_CH1
+  TIM_OC_InitTypeDef sConfigOC_3 = {0}; //PA2  -TIM2_CH3
+  
+  htim2.Instance =TIM2 ; 
   htim2.Init.Prescaler = 4-1; //ck_cnt = 16MHz /(PSC + 1)
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim2.Init.Period = 100 -1 ; //Fpwm = ck_cnt / Period = 
@@ -108,18 +116,84 @@ void MX_TIM2_Init(void)
   {
     Error_Handler();
   }
-  sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 80;  //pwm duty cycle 80%
-  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-  if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)// TIM_CHANNEL_1 to TIM_CHANNEL_2 PA1 ---> TIM2_CH2
+  //PA15 TIM2_CH1
+  sConfigOC_1.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC_1.Pulse = 80;  //pwm duty cycle 80%
+  sConfigOC_1.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC_1.OCFastMode = TIM_OCFAST_DISABLE;
+  if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC_1, TIM_CHANNEL_1) != HAL_OK)// TIM_CHANNEL_1 to TIM_CHANNEL_2 PA1 ---> TIM2_CH2
+  {
+    Error_Handler();
+  }
+  //PA2 TIM2_CH3
+  sConfigOC_3.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC_3.Pulse = 80;  //pwm duty cycle 80%
+  sConfigOC_3.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC_3.OCFastMode = TIM_OCFAST_DISABLE;
+  if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC_3, TIM_CHANNEL_3) != HAL_OK)// TIM_CHANNEL_1 to TIM_CHANNEL_2 PA1 ---> TIM2_CH2
   {
     Error_Handler();
   }
   HAL_TIM_MspPostInit(&htim2);
 
 }
+/*************************************************************************************
+*	*
+*Function Name:void MX_TIM3_Init(void)
+*Function:Timer 3 define and frequency set  PB4------> TIM3_CH1--AF1 
+*
+*	
+**************************************************************************************/
+void MX_TIM3_Init(void)
+{
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_OC_InitTypeDef sConfigOC = {0};
 
+  htim3.Instance =TIM3;
+  htim3.Init.Prescaler = 4-1; //ck_cnt = 16MHz /(PSC + 1)
+  htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim3.Init.Period = 100 -1 ; //Fpwm = ck_cnt / Period = 
+  htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim3, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_TIM_PWM_Init(&htim3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC.Pulse = 80;  //pwm duty cycle 80%
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  if (HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)// TIM_CHANNEL_1 to TIM_CHANNEL_2 PA1 ---> TIM2_CH2
+  {
+    Error_Handler();
+  }
+  HAL_TIM_MspPostInit(&htim3);
+
+}
+/**************************************************************************************
+***
+*Function Name:void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* tim_baseHandle)
+*Function :special MCU initianl function, must to connector MCU process user edit cods
+*
+*
+*
+**************************************************************************************/
 void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* tim_baseHandle)
 {
 
@@ -141,14 +215,20 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* tim_baseHandle)
   /* USER CODE END TIM3_MspInit 0 */
     /* TIM3 clock enable */
     __HAL_RCC_TIM2_CLK_ENABLE();//__HAL_RCC_TIM3_CLK_ENABLE(); //WT.EDIT 
+	HAL_NVIC_SetPriority(TIM3_IRQn, 1, 1);    //HAL_NVIC_SetPriority(TIM3_IRQn, 0, 0); //WT.EDIT 
+    HAL_NVIC_EnableIRQ(TIM3_IRQn);   //HAL_NVIC_EnableIRQ(TIM3_IRQn);
 
-    /* TIM3 interrupt Init */
-  //  HAL_NVIC_SetPriority(TIM2_IRQn, 0, 0);    //HAL_NVIC_SetPriority(TIM3_IRQn, 0, 0); //WT.EDIT 
-  //  HAL_NVIC_EnableIRQ(TIM2_IRQn);   //HAL_NVIC_EnableIRQ(TIM3_IRQn);
-  /* USER CODE BEGIN TIM3_MspInit 1 */
-
-  /* USER CODE END TIM3_MspInit 1 */
+   
   }
+   else if(tim_baseHandle->Instance==TIM3){
+      
+	    __HAL_RCC_TIM3_CLK_ENABLE(); //WT.EDIT 
+	    /* TIM3 interrupt Init */
+        HAL_NVIC_SetPriority(TIM3_IRQn, 2, 0);    //HAL_NVIC_SetPriority(TIM3_IRQn, 0, 0); //WT.EDIT 
+        HAL_NVIC_EnableIRQ(TIM3_IRQn);   //HAL_NVIC_EnableIRQ(TIM3_IRQn);
+  
+   
+   }
 }
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef* timHandle)
 {
@@ -162,41 +242,48 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef* timHandle)
     //__HAL_RCC_GPIOA_CLK_ENABLE();
 	 __HAL_RCC_GPIOB_CLK_ENABLE();
     /**TIM1 GPIO Configuration    
-    PA8     ------> TIM1_CH1 
 	PB3     ------> TIM1_CH2
     */
-    GPIO_InitStruct.Pin = GPIO_PIN_3; //GPIO_InitStruct.Pin = GPIO_PIN_8;
+    GPIO_InitStruct.Pin = GPIO_PIN_3; 
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH ;//GPIO_SPEED_FREQ_LOW;
-    GPIO_InitStruct.Alternate = GPIO_AF1_TIM1;//GPIO_AF2_TIM1;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH ;
+    GPIO_InitStruct.Alternate = GPIO_AF1_TIM1;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /* USER CODE BEGIN TIM1_MspPostInit 1 */
 
   /* USER CODE END TIM1_MspPostInit 1 */
   }
-  else if(timHandle->Instance==TIM2)//else if(timHandle->Instance==TIM3)
+  else if(timHandle->Instance==TIM2)// PA15 -TIM2_CH1-ETR PA2->TIM2_CH3
   {
-  /* USER CODE BEGIN TIM3_MspPostInit 0 */
-
-  /* USER CODE END TIM3_MspPostInit 0 */
   
     __HAL_RCC_GPIOA_CLK_ENABLE();
-    /**TIM3 GPIO Configuration    
-    PA6     ------> TIM3_CH1 
-	PA1     ------> TIM2_CH2
+    /**TIM2 GPIO Configuration    
+    PA15    ------> TIM2_CH1-ETR
+	PA2     ------> TIM2_CH3
     */
-    GPIO_InitStruct.Pin = GPIO_PIN_1; //GPIO_PIN_6;
+    GPIO_InitStruct.Pin = GPIO_PIN_15|GPIO_PIN_2;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-    GPIO_InitStruct.Alternate =GPIO_AF2_TIM2; //GPIO_AF1_TIM3;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    GPIO_InitStruct.Alternate =GPIO_AF2_TIM2; 
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /* USER CODE BEGIN TIM3_MspPostInit 1 */
-
-  /* USER CODE END TIM3_MspPostInit 1 */
+  }
+  else if(timHandle ->Instance == TIM3){  //PB4 TIM3_CH1-AF1
+  
+		__HAL_RCC_GPIOB_CLK_ENABLE();
+	  /**TIM3 GPIO Configuration    
+    PB4     ------> TIM3_CH1 
+    */
+    GPIO_InitStruct.Pin = GPIO_PIN_4;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    GPIO_InitStruct.Alternate =GPIO_AF1_TIM3;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  
   }
 
 }
@@ -229,4 +316,12 @@ void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef* tim_baseHandle)
 
   /* USER CODE END TIM3_MspDeInit 1 */
   }
+   else if(tim_baseHandle->Instance==TIM3)// TIM3 to TIM2
+   {
+		 __HAL_RCC_TIM3_CLK_DISABLE();//__HAL_RCC_TIM3_CLK_DISABLE();
+
+    /* TIM3 interrupt Deinit */
+      HAL_NVIC_DisableIRQ(TIM3_IRQn);//HAL_NVIC_DisableIRQ(TIM3_IRQn);
+   
+   }
 } 

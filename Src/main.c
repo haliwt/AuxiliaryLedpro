@@ -49,26 +49,27 @@ int main(void)
   MX_USART1_UART_Init();
 	MX_TIM2_Init();
 	MX_TIM1_Init();
+	MX_TIM3_Init();
   /* USER CODE BEGIN WHILE */
   while (1)
   {
 		/* USER CODE END WHILE */
-		if (HAL_UART_Receive_IT(&huart1, (uint8_t *)aRxBuffer, RXBUFFERSIZE) != HAL_OK)
+		//if (HAL_UART_Receive_IT(&huart1, (uint8_t *)aRxBuffer, RXBUFFERSIZE) != HAL_OK)
 		{
 		  //Error_Handler();
 		}
-		else{
+		//else
+		{
 			
-//			if(HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2) != HAL_OK)
-//			{
-//			
-//			}
-//			if(HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2)!= HAL_OK){
-//			
-//			
-//			}
-
-		    SingleLed_Test() ; //TestMode
+			//HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1);//PA15-22PIN--OK
+			
+			HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3); //PA2-8PIN
+			
+			
+			
+			//HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);
+			//HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
+		   // SingleLed_Test() ; //TestMode
 		
 		//if (HAL_UART_Transmit_IT(&huart1, (uint8_t *)aRxBuffer, RXBUFFERSIZE) != HAL_OK)
 		//{
