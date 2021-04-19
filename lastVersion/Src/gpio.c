@@ -47,57 +47,59 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
-  /*Configure GPIOC pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, LEDD3_Pin, GPIO_PIN_RESET);
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOC, LEDB8_Pin|LEDBCUT_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIOA pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, LEDAPWM_Pin|LEDA1_Pin|LEDA2_Pin|LEDD4_CUT_Pin|LEDD2_Pin|LEDD1_Pin
-                          |LEDA3_Pin|LEDA4_Pin|LEDBPWM_Pin|LEDD3_CUT_Pin|LEDD4_Pin
-                          , GPIO_PIN_RESET);
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOA, LEDACUT_Pin|LEDAPWM_Pin|LEDA1_Pin|LEDA2_Pin
+                          |LEDA3_Pin|LEDA4_Pin|LEDA5_Pin|LEDA6_Pin
+                          |FAN_Pin|LEDB1_Pin|LEDB2_Pin|LEDB3_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIOB pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, LEDCPWM_Pin|LEDDPWM_Pin, GPIO_PIN_RESET);
-   
-   
-   //GPIO Initinal 
-  /*Configure GPIOC pin : LEDD3_Pin */
-  GPIO_InitStruct.Pin = LEDD3_Pin;
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, LEDA7_Pin|LEDA8_Pin|LEDBPWM_Pin|LEDB4_Pin
+                          |LEDB5_Pin|LEDB7_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : LEDB8_Pin */
+  GPIO_InitStruct.Pin = LEDB8_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LEDD3_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(LEDB8_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIOA pins : LEDACUT_Pin LEDAPWM_Pin LEDA2_Pin LEDA3_Pin
+  /*Configure GPIO pins : LEDACUT_Pin LEDAPWM_Pin LEDA2_Pin LEDA3_Pin
                            LEDA4_Pin LEDA5_Pin LEDA6_Pin FAN_Pin
                            LEDB1_Pin LEDB2_Pin LEDB3_Pin */
-													 
-  GPIO_InitStruct.Pin = LEDAPWM_Pin|LEDA1_Pin|LEDA2_Pin|LEDD4_CUT_Pin|LEDD2_Pin|LEDD1_Pin
-                          |LEDA3_Pin|LEDA4_Pin|LEDBPWM_Pin|LEDD3_CUT_Pin|LEDD4_Pin;
+  GPIO_InitStruct.Pin = LEDACUT_Pin|LEDAPWM_Pin|LEDA2_Pin|LEDA3_Pin
+                          |LEDA4_Pin|LEDA5_Pin|LEDA6_Pin|FAN_Pin
+                          |LEDB1_Pin|LEDB2_Pin|LEDB3_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : LEDA1_Pin */
+  GPIO_InitStruct.Pin = LEDA1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(LEDA1_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIOB pins : LEDA7_Pin LEDA8_Pin LEDBPWM_Pin LEDB4_Pin
+  /*Configure GPIO pins : LEDA7_Pin LEDA8_Pin LEDBPWM_Pin LEDB4_Pin
                            LEDB5_Pin LEDB6_Pin LEDB7_Pin */
-  GPIO_InitStruct.Pin = LEDCPWM_Pin|LEDDPWM_Pin;
+  GPIO_InitStruct.Pin = LEDA7_Pin|LEDA8_Pin|LEDBPWM_Pin|LEDB4_Pin
+                          |LEDB5_Pin|LEDB7_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-  
-  
-  //Configure GPIOB PB5 INPUT pins 
-  GPIO_InitStruct.Pin = LEDCON_LR_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed =  GPIO_SPEED_FREQ_MEDIUM;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-  
 
- 
-  //USART AFx Function Define GPIO
+  /*Configure GPIO pin : LEDBCUT_Pin */
+  GPIO_InitStruct.Pin = LEDBCUT_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(LEDBCUT_GPIO_Port, &GPIO_InitStruct);
+
   /*Configure GPIO pin : PB7  --AF0 USART1 */
   GPIO_InitStruct.Pin = GPIO_PIN_7;
   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
@@ -106,7 +108,7 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Alternate = GPIO_AF0_USART1;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 	
-  /*Configure GPIO pin : PB6 */
+	/*Configure GPIO pin : PB6 */
   GPIO_InitStruct.Pin = GPIO_PIN_6;
   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;

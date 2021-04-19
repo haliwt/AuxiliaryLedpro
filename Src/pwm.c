@@ -188,10 +188,10 @@ void MX_TIM3_Init(void)
 }
 /**************************************************************************************
 ***
-*Function Name:void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* tim_baseHandle)
-*Function :special MCU initianl function, must to connector MCU process user edit cods
-*
-*
+  * 函数功能: 基本定时器硬件反初始化配置
+  * 输入参数: htim_base：基本定时器句柄类型指针
+  * 返 回 值: 无
+  * 说    明: 该函数被HAL库内部调用
 *
 **************************************************************************************/
 void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* tim_baseHandle)
@@ -210,26 +210,33 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* tim_baseHandle)
   }
   else if(tim_baseHandle->Instance==TIM2) //TIM3 to TIM2 WT.EDIT 2021.04.15
   {
-  /* USER CODE BEGIN TIM3_MspInit 0 */
-
-  /* USER CODE END TIM3_MspInit 0 */
-    /* TIM3 clock enable */
+ 
+    /* TIM2 clock enable */
     __HAL_RCC_TIM2_CLK_ENABLE();//__HAL_RCC_TIM3_CLK_ENABLE(); //WT.EDIT 
-	HAL_NVIC_SetPriority(TIM3_IRQn, 1, 1);    //HAL_NVIC_SetPriority(TIM3_IRQn, 0, 0); //WT.EDIT 
-    HAL_NVIC_EnableIRQ(TIM3_IRQn);   //HAL_NVIC_EnableIRQ(TIM3_IRQn);
+//	HAL_NVIC_SetPriority(TIM2_IRQn, 2, 0);    //HAL_NVIC_SetPriority(TIM3_IRQn, 0, 0); //WT.EDIT 
+//    HAL_NVIC_EnableIRQ(TIM2_IRQn);   //HAL_NVIC_EnableIRQ(TIM3_IRQn);
 
    
   }
    else if(tim_baseHandle->Instance==TIM3){
-      
+       /* TIM3 clock enable */
 	    __HAL_RCC_TIM3_CLK_ENABLE(); //WT.EDIT 
 	    /* TIM3 interrupt Init */
-        HAL_NVIC_SetPriority(TIM3_IRQn, 2, 0);    //HAL_NVIC_SetPriority(TIM3_IRQn, 0, 0); //WT.EDIT 
-        HAL_NVIC_EnableIRQ(TIM3_IRQn);   //HAL_NVIC_EnableIRQ(TIM3_IRQn);
+//        HAL_NVIC_SetPriority(TIM3_IRQn, 1, 0);   
+//        HAL_NVIC_EnableIRQ(TIM3_IRQn);  
   
    
    }
 }
+/*************************************************************************************
+**
+
+  * 函数功能: 定时器硬件初始化配置
+  * 输入参数: htim：定时器句柄类型指针
+  * 返 回 值: 无
+  * 说    明: 该函数--HAL lib 
+*
+**************************************************************************************/
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef* timHandle)
 {
 
@@ -287,7 +294,12 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef* timHandle)
   }
 
 }
-
+/**
+  * 函数功能: 基本定时器硬件反初始化配置
+  * 输入参数: htim_base：基本定时器句柄类型指针
+  * 返 回 值: 无
+  * 说    明: 该函数被HAL库内部调用
+  */
 void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef* tim_baseHandle)
 {
 

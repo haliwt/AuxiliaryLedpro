@@ -27,16 +27,16 @@
 #define LEDAPWM_Pin 				GPIO_PIN_2 //  //PA2 -TIM2_CH3 --AF2
 #define LEDAPWM_GPIO_Port 			GPIOA
 
-#define LEDA4_Pin 					GPIO_PIN_3    //PA3
+#define LEDA4_Pin 					GPIO_PIN_3    //PA3    --dot led-red
 #define LEDA4_GPIO_Port 			GPIOA
 
-#define LEDA3_Pin 					GPIO_PIN_4   //PA4
+#define LEDA3_Pin 					GPIO_PIN_4   //PA4  --white led
 #define LEDA3_GPIO_Port 			GPIOA
 
-#define LEDA2_Pin 					GPIO_PIN_5  //PA5
+#define LEDA2_Pin 					GPIO_PIN_5  //PA5 -- 
 #define LEDA2_GPIO_Port 			GPIOA
 
-#define LEDA1_Pin 					GPIO_PIN_6   //PA6
+#define LEDA1_Pin 					GPIO_PIN_6   //PA6--PIN12 --red led
 #define LEDA1_GPIO_Port 			GPIOA
 
 //The second group led B define 
@@ -44,7 +44,7 @@
 #define LEDBPWM_GPIO_Port 			GPIOA
 
 //The third group led  C define 
-#define LEDCPWM_Pin 					GPIO_PIN_3  //PB3 --TIM1-CH2 -AF1
+#define LEDCPWM_Pin 					GPIO_PIN_3  //PB3 --TIM1-CH2 -AF1 
 #define LEDCPWM_GPIO_Port 				GPIOB
 
 //The fourth group Led D  define
@@ -60,7 +60,7 @@
 #define LEDD2_Pin 						GPIO_PIN_11  //PA11
 #define LEDD2_GPIO_Port 				GPIOA
 
-#define LEDD1_Pin 						GPIO_PIN_12  //PA12
+#define LEDD1_Pin 						GPIO_PIN_12  //PA12 --red led
 #define LEDD1_GPIO_Port 				GPIOA
 
 #define LEDD4_Pin 					    GPIO_PIN_8  //PA8  --

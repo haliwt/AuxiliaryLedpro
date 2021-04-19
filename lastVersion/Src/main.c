@@ -1,9 +1,9 @@
 /* USER CODE BEGIN Header */
 /***************************************************************************//**
-  锟侥硷拷: main.c
+  文件: main.c
   Function: singleLed be Hardware test
-  锟芥本: V1.0.0
-  时锟斤拷: 20210413
+  版本: V1.0.0
+  时间: 20210413
 	Hardware IC: stm32g031g8Ux
 *******************************************************************************/
 /* USER CODE END Header */
@@ -12,16 +12,16 @@
 #include "main.h"
 #include "usart.h"
 #include "gpio.h"
+#include "txdecode.h"
 #include "singleled.h"
-#include "pwm.h"
 
 
 void SystemClock_Config(void);
 
 /* USER CODE BEGIN 0 */
-uint8_t aTxBuffer[RXBUFFERSIZE] ;
+	uint8_t aTxBuffer[3] ;
 	#define COUNTOF(__BUFFER__)   (sizeof(__BUFFER__) / sizeof(*(__BUFFER__)))
-//	#define TXBUFFERSIZE                    3 //(COUNTOF(aTxBuffer)) //(COUNTOF(aTxBuffer) - 1)
+	#define TXBUFFERSIZE                    3 //(COUNTOF(aTxBuffer)) //(COUNTOF(aTxBuffer) - 1)
 /* Size of Reception buffer */
 //#define RXBUFFERSIZE                    7 //TXBUFFERSIZE
 uint8_t aRxBuffer[RXBUFFERSIZE];
@@ -36,7 +36,7 @@ uint8_t aRxBuffer[RXBUFFERSIZE];
 int main(void)
 {
   
-  
+  uint8_t i;
 	HAL_Init();
 
 
@@ -47,30 +47,31 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART1_UART_Init();
-	MX_TIM2_Init();
-	MX_TIM1_Init();
-	MX_TIM3_Init();
+
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		/* USER CODE END WHILE */
-		if (HAL_UART_Receive_IT(&huart1, (uint8_t *)aRxBuffer, RXBUFFERSIZE) != HAL_OK)
-		{
-		  Error_Handler();
-		}
-		else
-		{
-			
-		  SingleLed_Test() ; //TestMode
-			if (HAL_UART_Transmit_IT(&huart1, (uint8_t *)aRxBuffer, RXBUFFERSIZE) != HAL_OK){
-			      Error_Handler();
-			 }
-		
-		}
+			/* USER CODE END WHILE */
+			   if (HAL_UART_Receive_IT(&huart1, (uint8_t *)aRxBuffer, RXBUFFERSIZE) != HAL_OK)
+				{
+					//Error_Handler();
+				}
+				else{
+
+          SingleLed_Test() ;//TxDecode();
+          if (HAL_UART_Transmit_IT(&huart1, (uint8_t *)aRxBuffer, RXBUFFERSIZE) != HAL_OK)
+          {
+            UartReady = RESET;
+            // Error_Handler();
+						}
+					 // for(i=0;i<8;i++)
+					  //  aRxBuffer[i] =0;
+            
+				}
 				
 		
   }
-  
+  /* USER CODE END 3 */
 }
 
 /**

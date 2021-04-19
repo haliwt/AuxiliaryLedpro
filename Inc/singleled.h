@@ -14,14 +14,24 @@ void TheSecondGroup_SingleLEDB(void); //the second group led
 void TheThirdGroup_SingleLEDC(void);  //the third group led
 void TheFourthGroup_SingleLEDD(void); //the fourth group led
 
-void LR_Control(uint8_t fanval);
+void RedLed(void);
+void GreenLed(void);
+void BlueLed(void);
+
+void RedGreenBlue_LED_Com(void);
+
+uint8_t  ReadLR_Control(void);
 
 typedef struct _ledabled_
 {
-  uint8_t led_by_a;
-  uint8_t led_by_b;
+  uint8_t led_red;
+  uint8_t led_green;
+  uint8_t led_blue;
+  uint8_t led_one;
+  uint8_t led_four;
   uint8_t led_by_c;
   uint8_t led_by_d;
+  uint8_t runstep;
     
 }led;
 
