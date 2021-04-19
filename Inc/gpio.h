@@ -36,7 +36,7 @@
 #define LEDA2_Pin 					GPIO_PIN_5  //PA5
 #define LEDA2_GPIO_Port 			GPIOA
 
-#define LEDA1_Pin 					GPIO_PIN_6   //PA6
+#define LEDA1_Pin 					GPIO_PIN_6   //PA6--PIN12
 #define LEDA1_GPIO_Port 			GPIOA
 
 //The second group led B define 

@@ -155,19 +155,19 @@ void USART1_IRQHandler(void)
   /* USER CODE END USART1_IRQn 1 */
 }
 
-void TIM2_IRQHandler(void)
-{
+//void TIM2_IRQHandler(void)
+//{
 
-      HAL_TIM_IRQHandler(&htim2);
+//      HAL_TIM_IRQHandler(&htim2);
 
-}
+//}
 
-void TIM3_IRQHandler(void)
-{
+//void TIM3_IRQHandler(void)
+//{
 
-      HAL_TIM_IRQHandler(&htim3);
+//      HAL_TIM_IRQHandler(&htim3);
 
-}
+//}
 /* USER CODE BEGIN 1 */
 
 /* USER CODE END 1 */

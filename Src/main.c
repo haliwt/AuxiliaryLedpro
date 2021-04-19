@@ -54,7 +54,7 @@ int main(void)
   while (1)
   {
 		/* USER CODE END WHILE */
-		//if (HAL_UART_Receive_IT(&huart1, (uint8_t *)aRxBuffer, RXBUFFERSIZE) != HAL_OK)
+	//	if (HAL_UART_Receive_IT(&huart1, (uint8_t *)aRxBuffer, RXBUFFERSIZE) != HAL_OK)
 		{
 		  //Error_Handler();
 		}
@@ -63,13 +63,22 @@ int main(void)
 			
 			//HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1);//PA15-22PIN--OK
 			
-			HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3); //PA2-8PIN
+			//HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3); //PA2-8PIN
 			
-			
+		//	TurnOff_TheSecondLedB();
+			   // TurnOff_TheThirdLedC();
+			   // TurnOff_TheFourthLedD();
+			//	HAL_Delay(100);
+              //  TurnOff_TheFirstLedA();
+				HAL_Delay(100);
+				//1.turn on LEDA1 =1
+			    HAL_GPIO_WritePin(LEDA2_GPIO_Port, LEDA2_Pin, GPIO_PIN_SET);
+			   //2.EN on
+                HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3) ; //PA2
 			
 			//HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);
-			//HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
-		   // SingleLed_Test() ; //TestMode
+			//HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;  //PB4 -PIN24
+		  // SingleLed_Test() ; //TestMode
 		
 		//if (HAL_UART_Transmit_IT(&huart1, (uint8_t *)aRxBuffer, RXBUFFERSIZE) != HAL_OK)
 		//{

@@ -21,7 +21,8 @@ void SingleLed_Test(void)
 	HAL_UART_Transmit(&huart1,&temp,1, 2);
 	if(cmdType_0 == 0x42){
 		if(cmdType_1 == 0x4c){
-			if(cmdType_6 == temp){
+			if(cmdType_6 == 0xAA)//if(cmdType_6 == temp)
+			{
 				
 				TheFirstGroup_SingleLEDA();
 				TheSecondGroup_SingleLEDB();
