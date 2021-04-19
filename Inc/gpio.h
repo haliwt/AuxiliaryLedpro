@@ -61,7 +61,7 @@
 #define LEDD2_GPIO_Port 				GPIOA
 
 #define LEDD1_Pin 						GPIO_PIN_12  //PA12 --red led
-#define LEDD1_GPIO_Port 				GPIOA
+#define LEDD1_GPIO_Port 			GPIOA
 
 #define LEDD4_Pin 					    GPIO_PIN_8  //PA8  --
 #define LEDD4_GPIO_Port 				GPIOA

@@ -29,8 +29,7 @@ typedef struct _ledabled_
   uint8_t led_blue;
   uint8_t led_one;
   uint8_t led_four;
-  uint8_t led_by_c;
-  uint8_t led_by_d;
+  uint8_t led_by_cd;
   uint8_t runstep;
     
 }led;
