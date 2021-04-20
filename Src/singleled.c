@@ -9,7 +9,7 @@ static void RedLed_Off(void);
 static void GreenLed_Off(void);
 static void BlueLed_Off(void);
 
-static uint8_t ReadLR_Control(void) ;
+
 /*************************************************************************
  	*
 	*Function Name: void SingleLed_Test(void)
@@ -34,19 +34,40 @@ void SingleLed_Test(void)
 		if(cmdType_1 == 0x4c){
 			if(cmdType_6 == temp)//if(cmdType_6 == temp)
 			{
-				
-				ledab.runstep =1;
-				HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
-				TheFirstGroup_SingleLEDA();
-				TheSecondGroup_SingleLEDB();
-				TheThirdGroup_SingleLEDC();
-				TheFourthGroup_SingleLEDD();
-				//compound mode
-				RedGreenBlue_LED_Com();
+				if(ledab.left_side ==1){
+					ledab.runstep =1;
+					HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
+					TheFirstGroup_SingleLEDA();
+					TheSecondGroup_SingleLEDB();
+					TheThirdGroup_SingleLEDC();
+					TheFourthGroup_SingleLEDD();
+					//compound mode
+					RedGreenBlue_LED_Com();
+				}
+				else{
+
+					ledab.runstep =1;
+					HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
+					TheFirstGroup_SingleLEDA();
+					TheSecondGroup_SingleLEDB();
+					TheThirdGroup_SingleLEDC();
+					TheFourthGroup_SingleLEDD();
+					//compound mode
+					RedGreenBlue_LED_Com();
+
+				}
 				 
+			}
+			else{
+			  return ;
 			}
 				
 		}
+	 }
+	else{
+	   
+		return ;
+	
 	}
 }
 
@@ -61,12 +82,12 @@ void SingleLed_Test(void)
 ******************************************************************************/
 void TheFirstGroup_SingleLEDA(void)
 {
-        if (ledab.led_by_cd > 0x14 && ReadLR_Control() == 1)
+        if (ledab.led_by_cd > 0x14)
         {
           TurnOff_TheFirstLedA();
 		
 		}
-        else if(ReadLR_Control() == 1)
+        else 
         {
             switch (ledab.led_by_cd)
             {
@@ -152,12 +173,12 @@ void TheFirstGroup_SingleLEDA(void)
 void TheSecondGroup_SingleLEDB(void)
 {
 
-	if (ledab.led_by_cd > 0x21 && ReadLR_Control() == 1)
+	if (ledab.led_by_cd > 0x21)
 	{
 		TurnOff_TheSecondLedB();
 			
 	}
-    else if(ReadLR_Control() == 1)
+    else 
      {
 			switch (ledab.led_by_cd)
 			{
@@ -197,12 +218,12 @@ void TheSecondGroup_SingleLEDB(void)
 ******************************************************************************/
  void TheThirdGroup_SingleLEDC(void)
  {
-	if (ledab.led_by_cd > 0x31 && ReadLR_Control() == 1)
+	if (ledab.led_by_cd > 0x31 )
 	{
 		TurnOff_TheThirdLedC();
 			
 	}
-    else if(ReadLR_Control() == 1)
+    else 
     {
 			switch (ledab.led_by_cd)
 			{
@@ -243,12 +264,12 @@ void TheSecondGroup_SingleLEDB(void)
 ******************************************************************************/
 void TheFourthGroup_SingleLEDD(void)
 {
-	if (ledab.led_by_cd > 0x44 && ReadLR_Control() == 1)
+	if (ledab.led_by_cd > 0x44 )
 	{
 		
         TurnOff_TheFourthLedD();		
      }
-    else if(ReadLR_Control() == 1)
+    else
     {
 			switch (ledab.led_by_cd)
 			{
@@ -367,7 +388,7 @@ void TurnOff_TheFirstLedA(void)
 {
      //turn off LEDA LED
 	   HAL_TIM_PWM_Stop(&htim2,TIM_CHANNEL_3) ; //HAL_GPIO_WritePin(LEDAPWM_GPIO_Port, LEDAPWM_Pin, GPIO_PIN_RESET);//TIM2_CH2
-	   HAL_Delay(200);
+	   HAL_Delay(50);
 	   HAL_GPIO_WritePin(GPIOA, LEDA1_Pin | LEDA2_Pin | LEDA3_Pin | LEDA4_Pin , GPIO_PIN_RESET);
       
 
@@ -384,7 +405,7 @@ void TurnOff_TheSecondLedB(void)
 {
 		 //turn off LEDB LED
 		 HAL_TIM_PWM_Stop(&htim2,TIM_CHANNEL_1);//TIM1_CH2 --PB3//HAL_GPIO_WritePin(LEDBPWM_GPIO_Port, LEDBPWM_Pin, GPIO_PIN_RESET);
-		 HAL_Delay(200);
+		 HAL_Delay(50);
 	
 }
 /*************************************************************************
@@ -399,7 +420,7 @@ void TurnOff_TheThirdLedC(void)
 {
 	//turn off LEDC LED
 	HAL_TIM_PWM_Stop(&htim1,TIM_CHANNEL_2);//TIM1_CH2 --PB3//HAL_GPIO_WritePin(LEDBPWM_GPIO_Port, LEDBPWM_Pin, GPIO_PIN_RESET);
-	HAL_Delay(200);
+	HAL_Delay(50);
 
 }
 /*************************************************************************
@@ -414,7 +435,7 @@ void TurnOff_TheFourthLedD(void)
 {
 	 //turn off LEDA LED
 	  HAL_TIM_PWM_Stop(&htim3,TIM_CHANNEL_1) ; //HAL_GPIO_WritePin(LEDAPWM_GPIO_Port, LEDAPWM_Pin, GPIO_PIN_RESET);//TIM2_CH2
-	  HAL_Delay(200);
+	  HAL_Delay(30);
      HAL_GPIO_WritePin(GPIOA, LEDD1_Pin | LEDD2_Pin | LEDD4_Pin , GPIO_PIN_RESET);
 	 HAL_GPIO_WritePin(GPIOC, LEDD3_Pin , GPIO_PIN_RESET);
 }
@@ -432,7 +453,7 @@ static uint8_t BCC_CHECK(void)
 	 
 	 uint8_t tembyte =0xAA ^ aRxBuffer[4];
 	 
-   //  tembyte = tembyte ^ aRxBuffer[5];
+     tembyte = tembyte ^ aRxBuffer[5];
     
     return tembyte;
 
@@ -506,14 +527,14 @@ static void BlueLed_Off()
 ******************************************************************************/
 void RedGreenBlue_LED_Com(void)
 {
-	if (ledab.led_by_cd > 0x56 && ReadLR_Control() == 1)
+	if (ledab.led_by_cd > 0x56 )
 	{
 		TurnOff_TheFirstLedA();
 		TurnOff_TheSecondLedB();
 		TurnOff_TheThirdLedC();
 		TurnOff_TheFourthLedD();		
      }
-    else if(ReadLR_Control() == 1)
+    else 
 	{
 	     switch(ledab.led_by_cd){
 		 
