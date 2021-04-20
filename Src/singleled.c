@@ -263,64 +263,76 @@ void TheFourthGroup_SingleLEDD(void)
 
 			break;
 
-            case 0x41:
-				ledab.runstep =0x41;
-				HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
-				TurnOff_TheFirstLedA();
+      case 0x41:
+					 ledab.runstep =0x41;
+				  HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
+			    TurnOff_TheFourthLedD();
+				  TurnOff_TheFirstLedA();
 			    TurnOff_TheSecondLedB();
 			    TurnOff_TheThirdLedC();
-	            TurnOff_TheFourthLedD();
-				HAL_Delay(100);
+	      
+				   HAL_Delay(100);
 				//1.turn on LEDB1 =1
-                 HAL_GPIO_WritePin(LEDD1_GPIO_Port, LEDD1_Pin, GPIO_PIN_SET);
+         HAL_GPIO_WritePin(LEDD1_GPIO_Port, LEDD1_Pin, GPIO_PIN_SET);
 				 HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
-				 HAL_Delay(200);
+				// HAL_Delay(100);
+			  
                 break;
 
             case 0x42:
 				ledab.runstep =0x42;
 				HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
+				 TurnOff_TheFourthLedD();
 				TurnOff_TheFirstLedA();
 			    TurnOff_TheSecondLedB();
 			    TurnOff_TheThirdLedC();
-	            TurnOff_TheFourthLedD();
+	        
 				HAL_Delay(100);
 
 				//turn on LEDB1
 				HAL_GPIO_WritePin(LEDD2_GPIO_Port, LEDD2_Pin, GPIO_PIN_SET);
-                HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
-				 HAL_Delay(200);
+        HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
+				//HAL_Delay(100);
+				
+		
                 break;
 			
 			  case 0x43:
 				ledab.runstep =0x43;
 				HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
+				 TurnOff_TheFourthLedD();
 				TurnOff_TheFirstLedA();
 			    TurnOff_TheSecondLedB();
 			    TurnOff_TheThirdLedC();
-	            TurnOff_TheFourthLedD();
+	       
 				HAL_Delay(100);
 
 				//turn on LEDB1
 				HAL_GPIO_WritePin(LEDD3_GPIO_Port, LEDD3_Pin, GPIO_PIN_SET);
-                HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
-				 HAL_Delay(200);
+        HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
+				//HAL_Delay(100);
+				
+			
                 break;
 			  
 			    case 0x44:
-			    ledab.runstep =0x44;
+				ledab.runstep =0x44;
 				HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
+			  TurnOff_TheFourthLedD();
 				TurnOff_TheFirstLedA();
-			    TurnOff_TheSecondLedB();
-			    TurnOff_TheThirdLedC();
-	            TurnOff_TheFourthLedD();
+			  TurnOff_TheSecondLedB();
+			  TurnOff_TheThirdLedC();
+	        
 				HAL_Delay(100);
-
-				//turn on LEDB1
+        //turn on LEDB1
 				HAL_GPIO_WritePin(LEDD4_GPIO_Port, LEDD4_Pin, GPIO_PIN_SET);
-                HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
-				 HAL_Delay(200);
-                break;
+        HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
+			//	HAL_Delay(100);
+			  
+         break;
+					default:
+						
+					break;
 			}
         }
  

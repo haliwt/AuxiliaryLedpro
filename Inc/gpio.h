@@ -54,7 +54,7 @@
 #define LEDD3_CUT_Pin 				 	GPIO_PIN_0   //PA0
 #define LEDD3_CUT_GPIO_Port 		 	GPIOA
 
-#define LEDD4_CUT_Pin 					GPIO_PIN_7   //PA7 ---current increase The fourth group led number 4
+#define LEDD4_CUT_Pin 					GPIO_PIN_7  //PA7 ---current increase The fourth group led number 4
 #define LEDD4_CUT_GPIO_Port 			GPIOA
 
 #define LEDD2_Pin 						GPIO_PIN_11  //PA11
@@ -63,7 +63,7 @@
 #define LEDD1_Pin 						GPIO_PIN_12  //PA12 --red led
 #define LEDD1_GPIO_Port 			GPIOA
 
-#define LEDD4_Pin 					    GPIO_PIN_8  //PA8  --
+#define LEDD4_Pin 					    GPIO_PIN_8 //PA8  --
 #define LEDD4_GPIO_Port 				GPIOA
 
 #define LEDD3_Pin            		    GPIO_PIN_6  //PC6
