@@ -141,7 +141,7 @@ void MX_TIM2_Init(void)
 /*************************************************************************************
 *	*
 *Function Name:void MX_TIM3_Init(void)
-*Function:Timer 3 define and frequency set  PB4------> TIM3_CH1--AF1 the fourth group 
+*Function:Timer 3 define and frequency set  PB4------> TIM3_CH1--AF1 the fourth group
 *
 *	
 **************************************************************************************/
@@ -180,7 +180,7 @@ void MX_TIM3_Init(void)
   sConfigOC.Pulse = ledab.pwmDutyCycle_ch4; //80;  //pwm duty cycle 80%
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-  if (HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)// TIM_CHANNEL_1 to TIM_CHANNEL_2 PA1 ---> TIM2_CH2
+  if (HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)// TIM3_CH1 -PB4
   {
     Error_Handler();
   }
