@@ -1,5 +1,6 @@
 #include "pwm.h"
 #include "main.h"
+#include "singleled.h"
 
 TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim2;
@@ -8,7 +9,7 @@ TIM_HandleTypeDef htim3;
 /*************************************************************************************
 *	*
 *Function Name:void MX_TIM1_Init(void)
-*Function:Timer 1 define and frequency set PB3->TIM1_CH2-AF1
+*Function:Timer 1 define and frequency set PB3->TIM1_CH2-AF1 the third group PWM
 *
 *	
 **************************************************************************************/
@@ -47,7 +48,7 @@ void MX_TIM1_Init(void)
     Error_Handler();
   }
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 80; //pwm duty cycle 50%
+  sConfigOC.Pulse = ledab.pwmDutyCycle_ch3 ;//80; //pwm duty cycle 80%
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
@@ -81,7 +82,7 @@ void MX_TIM1_Init(void)
 *	*
 *Function Name:void MX_TIM2_Init(void)
 *Function:Timer 2 define and frequency set  PA15 --> TIM2_CH1-ETR, PA2->TIM2_CH3
-*
+*         the second group PWM
 *	
 **************************************************************************************/
 void MX_TIM2_Init(void)
@@ -118,7 +119,7 @@ void MX_TIM2_Init(void)
   }
   //PA15 TIM2_CH1
   sConfigOC_1.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC_1.Pulse = 80;  //pwm duty cycle 80%
+  sConfigOC_1.Pulse = ledab.pwmDutyCycle_ch2;//80;  //pwm duty cycle 80%
   sConfigOC_1.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC_1.OCFastMode = TIM_OCFAST_DISABLE;
   if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC_1, TIM_CHANNEL_1) != HAL_OK)// TIM_CHANNEL_1 to TIM_CHANNEL_2 PA1 ---> TIM2_CH2
@@ -127,7 +128,7 @@ void MX_TIM2_Init(void)
   }
   //PA2 TIM2_CH3
   sConfigOC_3.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC_3.Pulse = 80;  //pwm duty cycle 80%
+  sConfigOC_3.Pulse = ledab.pwmDutyCycle_ch1 ;//80;  //pwm duty cycle 80%
   sConfigOC_3.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC_3.OCFastMode = TIM_OCFAST_DISABLE;
   if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC_3, TIM_CHANNEL_3) != HAL_OK)// TIM_CHANNEL_1 to TIM_CHANNEL_2 PA1 ---> TIM2_CH2
@@ -140,7 +141,7 @@ void MX_TIM2_Init(void)
 /*************************************************************************************
 *	*
 *Function Name:void MX_TIM3_Init(void)
-*Function:Timer 3 define and frequency set  PB4------> TIM3_CH1--AF1 
+*Function:Timer 3 define and frequency set  PB4------> TIM3_CH1--AF1 the fourth group 
 *
 *	
 **************************************************************************************/
@@ -176,7 +177,7 @@ void MX_TIM3_Init(void)
     Error_Handler();
   }
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 80;  //pwm duty cycle 80%
+  sConfigOC.Pulse = ledab.pwmDutyCycle_ch4; //80;  //pwm duty cycle 80%
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
   if (HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)// TIM_CHANNEL_1 to TIM_CHANNEL_2 PA1 ---> TIM2_CH2
@@ -188,10 +189,10 @@ void MX_TIM3_Init(void)
 }
 /**************************************************************************************
 ***
-  * º¯Êý¹¦ÄÜ: »ù±¾¶¨Ê±Æ÷Ó²¼þ·´³õÊ¼»¯ÅäÖÃ
-  * ÊäÈë²ÎÊý: htim_base£º»ù±¾¶¨Ê±Æ÷¾ä±úÀàÐÍÖ¸Õë
-  * ·µ »Ø Öµ: ÎÞ
-  * Ëµ    Ã÷: ¸Ãº¯Êý±»HAL¿âÄÚ²¿µ÷ÓÃ
+  * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Ó²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: htim_baseï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
+  * ï¿½ï¿½ ï¿½ï¿½ Öµ: ï¿½ï¿½
+  * Ëµ    ï¿½ï¿½: ï¿½Ãºï¿½ï¿½ï¿½ï¿½ï¿½HALï¿½ï¿½ï¿½Ú²ï¿½ï¿½ï¿½ï¿½ï¿½
 *
 **************************************************************************************/
 void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* tim_baseHandle)
@@ -231,10 +232,10 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* tim_baseHandle)
 /*************************************************************************************
 **
 
-  * º¯Êý¹¦ÄÜ: ¶¨Ê±Æ÷Ó²¼þ³õÊ¼»¯ÅäÖÃ
-  * ÊäÈë²ÎÊý: htim£º¶¨Ê±Æ÷¾ä±úÀàÐÍÖ¸Õë
-  * ·µ »Ø Öµ: ÎÞ
-  * Ëµ    Ã÷: ¸Ãº¯Êý--HAL lib 
+  * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½Ê±ï¿½ï¿½Ó²ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: htimï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
+  * ï¿½ï¿½ ï¿½ï¿½ Öµ: ï¿½ï¿½
+  * Ëµ    ï¿½ï¿½: ï¿½Ãºï¿½ï¿½ï¿½--HAL lib 
 *
 **************************************************************************************/
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef* timHandle)
@@ -295,10 +296,10 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef* timHandle)
 
 }
 /**
-  * º¯Êý¹¦ÄÜ: »ù±¾¶¨Ê±Æ÷Ó²¼þ·´³õÊ¼»¯ÅäÖÃ
-  * ÊäÈë²ÎÊý: htim_base£º»ù±¾¶¨Ê±Æ÷¾ä±úÀàÐÍÖ¸Õë
-  * ·µ »Ø Öµ: ÎÞ
-  * Ëµ    Ã÷: ¸Ãº¯Êý±»HAL¿âÄÚ²¿µ÷ÓÃ
+  * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Ó²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: htim_baseï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
+  * ï¿½ï¿½ ï¿½ï¿½ Öµ: ï¿½ï¿½
+  * Ëµ    ï¿½ï¿½: ï¿½Ãºï¿½ï¿½ï¿½ï¿½ï¿½HALï¿½ï¿½ï¿½Ú²ï¿½ï¿½ï¿½ï¿½ï¿½
   */
 void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef* tim_baseHandle)
 {

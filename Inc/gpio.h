@@ -48,14 +48,17 @@
 #define LEDCPWM_GPIO_Port 				GPIOB
 
 //The fourth group Led D  define
-#define LEDDPWM_Pin 					GPIO_PIN_4  //PB4  --TIM3-CH1-AF1
+#define LEDDPWM_Pin 					    GPIO_PIN_4  //PB4  --TIM3-CH1-AF1
 #define LEDDPWM_GPIO_Port 				GPIOB
 
-#define LEDD3_CUT_Pin 				 	GPIO_PIN_0   //PA0
+#define LEDD3_CUT_Pin 				   	GPIO_PIN_0   //PA0
 #define LEDD3_CUT_GPIO_Port 		 	GPIOA
 
-#define LEDD4_CUT_Pin 					GPIO_PIN_7  //PA7 ---current increase The fourth group led number 4
+#define LEDD4_CUT_Pin 				  	GPIO_PIN_7  //PA7 ---current increase The fourth group led number 4
 #define LEDD4_CUT_GPIO_Port 			GPIOA
+
+#define LEDD2_EN_Pin              GPIO_PIN_8    //PB8 is LEDD2 and LEDD1 Enable control
+#define LEDD2_EN_GPIO_PORT           GPIOB 
 
 #define LEDD2_Pin 						GPIO_PIN_11  //PA11
 #define LEDD2_GPIO_Port 				GPIOA

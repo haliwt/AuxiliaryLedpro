@@ -32,6 +32,11 @@ typedef struct _ledabled_
   uint8_t led_by_cd;
   uint8_t runstep;
   uint8_t left_side;
+  uint8_t led_LR_id;
+  uint8_t pwmDutyCycle_ch1;
+  uint8_t pwmDutyCycle_ch2;
+  uint8_t pwmDutyCycle_ch3;
+  uint8_t pwmDutyCycle_ch4;
     
 }led;
 

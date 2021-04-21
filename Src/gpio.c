@@ -57,7 +57,7 @@ void MX_GPIO_Init(void)
 
   /*Configure GPIOB pin Output Level */
   HAL_GPIO_WritePin(GPIOB, LEDCPWM_Pin|LEDDPWM_Pin, GPIO_PIN_RESET);
-   
+  HAL_GPIO_WritePin(GPIOB, LEDD2_EN_Pin, GPIO_PIN_SET); //UV control EN pin
    
    //GPIO Initinal 
   /*Configure GPIOC pin : LEDD3_Pin */
@@ -81,7 +81,7 @@ void MX_GPIO_Init(void)
 
   /*Configure GPIOB pins : LEDA7_Pin LEDA8_Pin LEDBPWM_Pin LEDB4_Pin
                            LEDB5_Pin LEDB6_Pin LEDB7_Pin */
-  GPIO_InitStruct.Pin = LEDCPWM_Pin|LEDDPWM_Pin;
+  GPIO_InitStruct.Pin = LEDCPWM_Pin|LEDDPWM_Pin|LEDD2_EN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
