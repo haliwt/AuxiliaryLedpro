@@ -115,14 +115,13 @@ void TheFirstGroup_SingleLEDA(void)
 			break;
 			
 			case 0x11:
-			     ledab.runstep =0x11;
+			    ledab.runstep =0x11;
 				HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
 				TurnOff_TheSecondLedB();
 			    TurnOff_TheThirdLedC();
 			    TurnOff_TheFourthLedD();
-				HAL_Delay(100);
                 TurnOff_TheFirstLedA();
-				HAL_Delay(100);
+				HAL_Delay(20);
 				//1.turn on LEDA1 =1
 			    HAL_GPIO_WritePin(LEDA1_GPIO_Port, LEDA1_Pin, GPIO_PIN_SET);
 			   //2.EN on
@@ -138,10 +137,8 @@ void TheFirstGroup_SingleLEDA(void)
 				TurnOff_TheSecondLedB();
 			    TurnOff_TheThirdLedC();
 			    TurnOff_TheFourthLedD();
-				HAL_Delay(100);
-	
 				TurnOff_TheFirstLedA();
-				HAL_Delay(100);
+				HAL_Delay(20);
                 //turn on LEDA2  
                 HAL_GPIO_WritePin(LEDA2_GPIO_Port, LEDA2_Pin, GPIO_PIN_SET);
 				 ledab.pwmDutyCycle_ch1 = aRxBuffer[5] ;
@@ -154,9 +151,8 @@ void TheFirstGroup_SingleLEDA(void)
 				TurnOff_TheSecondLedB();
 			    TurnOff_TheThirdLedC();
 			    TurnOff_TheFourthLedD();
-				HAL_Delay(100);
 				TurnOff_TheFirstLedA();
-				HAL_Delay(100);
+				HAL_Delay(20);
                 //turn on LEDA3
                 HAL_GPIO_WritePin(LEDA3_GPIO_Port, LEDA3_Pin, GPIO_PIN_SET);
 				 ledab.pwmDutyCycle_ch1 = aRxBuffer[5] ;
@@ -170,7 +166,6 @@ void TheFirstGroup_SingleLEDA(void)
 				TurnOff_TheSecondLedB();
 			    TurnOff_TheThirdLedC();
 			    TurnOff_TheFourthLedD();
-				HAL_Delay(100);
 				TurnOff_TheFirstLedA();
 				HAL_Delay(100);
                 //turn on LEDA4
@@ -314,11 +309,13 @@ void TheFourthGroup_SingleLEDD(void)
 			    TurnOff_TheSecondLedB();
 			    TurnOff_TheThirdLedC();
 	      
-				HAL_Delay(50);
+				HAL_Delay(20);
 				//1.turn on LEDB1 =1
          		HAL_GPIO_WritePin(LEDD1_GPIO_Port, LEDD1_Pin, GPIO_PIN_SET);
 				HAL_GPIO_WritePin(LEDD2_EN_GPIO_PORT,LEDD2_EN_Pin,GPIO_PIN_RESET); //control LEDD1 ad LEDD2 Enable pin
 				 ledab.pwmDutyCycle_ch4 = aRxBuffer[5];
+				 MX_TIM3_Init();
+	             HAL_UART_Transmit(&huart1,&aRxBuffer[5],1, 2);
 				HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
 			
 			  

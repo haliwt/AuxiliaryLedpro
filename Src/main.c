@@ -60,10 +60,12 @@ int main(void)
 		}
 		else{
             ledab.left_side = ReadLR_Control();
+			
 			SingleLed_Test() ; //TestMode
-			if (HAL_UART_Transmit_IT(&huart1, (uint8_t *)aRxBuffer, RXBUFFERSIZE) != HAL_OK){
-			      Error_Handler();
-			 }
+//			if (HAL_UART_Transmit_IT(&huart1, (uint8_t *)aRxBuffer, RXBUFFERSIZE) != HAL_OK){
+//			      Error_Handler();
+//			 }
+			 HAL_UART_Transmit(&huart1,(uint8_t *)aRxBuffer,7, 2);
 		 }
 		
 				
