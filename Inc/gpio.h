@@ -80,6 +80,8 @@
 
 void MX_GPIO_Init(void);
 
+uint8_t ReadLR_Control(void) ;
+
 
 
 #ifdef __cplusplus

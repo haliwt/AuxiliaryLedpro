@@ -88,12 +88,12 @@ void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
   
   
-  //Configure GPIOB PB5 INPUT pins 
-  GPIO_InitStruct.Pin = LEDCON_LR_Pin;
+  //Configure GPIOB PB5,PB0 INPUT pins--
+  GPIO_InitStruct.Pin = LEDCON_LR_Pin| GPIO_PIN_0;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed =  GPIO_SPEED_FREQ_MEDIUM;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  GPIO_InitStruct.Pull = GPIO_NOPULL;//GPIO_PULLDOWN;//GPIO_NOPULL;
+  //GPIO_InitStruct.Speed =  GPIO_SPEED_FREQ_MEDIUM;
+  HAL_GPIO_Init(LEDCON_LR_GPIO_Port, &GPIO_InitStruct);
   
 
  
@@ -116,8 +116,22 @@ void MX_GPIO_Init(void)
 
 }
 
-/* USER CODE BEGIN 2 */
+/*************************************************************************
+ 	*
+	*Function Name:uint8_t  ReadLR_Control(void);
+	*Function : 
+	*Input Ref: NO
+	*Return Ref: 10 --left led on  01 --right led on
+	*
+******************************************************************************/
+uint8_t  ReadLR_Control(void)
+{
+        uint8_t tempVal;
+		tempVal = HAL_GPIO_ReadPin(LEDCON_LR_GPIO_Port,LEDCON_LR_Pin);
+	    if(tempVal == 0 ) return 0;
+		else if(tempVal == 1) return 1;
+	  
 
-/* USER CODE END 2 */
+}
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

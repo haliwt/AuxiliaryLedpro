@@ -20,7 +20,7 @@ void BlueLed(void);
 
 void RedGreenBlue_LED_Com(void);
 
-uint8_t ReadLR_Control(void) ;
+
 
 typedef struct _ledabled_
 {

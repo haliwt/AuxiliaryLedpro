@@ -38,7 +38,7 @@ extern "C" {
 
 #else 
 
-#define RXBUFFERSIZE          7 //TXBUFFERSIZE
+#define RXBUFFERSIZE          8 //TXBUFFERSIZE
 
 #endif 
 
