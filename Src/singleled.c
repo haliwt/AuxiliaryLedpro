@@ -315,7 +315,7 @@ void TheFourthGroup_SingleLEDD(void)
 				HAL_GPIO_WritePin(LEDD2_EN_GPIO_PORT,LEDD2_EN_Pin,GPIO_PIN_RESET); //control LEDD1 ad LEDD2 Enable pin
 				 ledab.pwmDutyCycle_ch4 = aRxBuffer[5];
 				 MX_TIM3_Init();
-	             HAL_UART_Transmit(&huart1,&aRxBuffer[5],1, 2);
+	            HAL_UART_Transmit(&huart1,&aRxBuffer[5],1, 2);
 				HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
 			
 			  
@@ -329,12 +329,13 @@ void TheFourthGroup_SingleLEDD(void)
 			    TurnOff_TheSecondLedB();
 			    TurnOff_TheThirdLedC();
 	        
-				HAL_Delay(50);
+				HAL_Delay(20);
 
 				//turn on LEDB1
 				HAL_GPIO_WritePin(LEDD2_GPIO_Port, LEDD2_Pin, GPIO_PIN_SET);
 				HAL_GPIO_WritePin(LEDD2_EN_GPIO_PORT,LEDD2_EN_Pin,GPIO_PIN_RESET); //control LEDD1 ad LEDD2 Enable pin
 				 ledab.pwmDutyCycle_ch4 = aRxBuffer[5];
+				 MX_TIM3_Init();
         		HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
 				//HAL_Delay(100);
 				
@@ -349,11 +350,12 @@ void TheFourthGroup_SingleLEDD(void)
 			    TurnOff_TheSecondLedB();
 			    TurnOff_TheThirdLedC();
 	       
-				HAL_Delay(50);
+				HAL_Delay(20);
 
 				//turn on LEDB1
 				HAL_GPIO_WritePin(LEDD3_GPIO_Port, LEDD3_Pin, GPIO_PIN_SET);
 				 ledab.pwmDutyCycle_ch4 = aRxBuffer[5];
+				 MX_TIM3_Init();
                  HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
 				//HAL_Delay(100);
 				
@@ -368,10 +370,11 @@ void TheFourthGroup_SingleLEDD(void)
 			  	TurnOff_TheSecondLedB();
 			  	TurnOff_TheThirdLedC();
 	        
-				HAL_Delay(50);
+				HAL_Delay(20);
         		//turn on LEDB1
 				HAL_GPIO_WritePin(LEDD4_GPIO_Port, LEDD4_Pin, GPIO_PIN_SET);
 				ledab.pwmDutyCycle_ch4 = aRxBuffer[5];
+				MX_TIM3_Init();
         		HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
 				//	HAL_Delay(100);
 			  
@@ -495,7 +498,8 @@ static uint8_t BCC_CHECK(void)
 ******************************************************************************/
 void RedLed(void)
 {
-	 ledab.pwmDutyCycle_ch4 = aRxBuffer[5] ;
+	ledab.pwmDutyCycle_ch4 = aRxBuffer[5] ;
+	 MX_TIM3_Init();
 	HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;  //PB4 -PIN24 --the fourth group pwm
 	HAL_GPIO_WritePin(LEDD4_GPIO_Port, LEDD4_Pin, GPIO_PIN_SET);
 
