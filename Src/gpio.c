@@ -51,9 +51,10 @@ void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOC, LEDD3_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIOA pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, LEDAPWM_Pin|LEDA1_Pin|LEDA2_Pin|LEDD4_CUT_Pin|LEDD2_Pin|LEDD1_Pin
+  HAL_GPIO_WritePin(GPIOA, LEDAPWM_Pin|LEDD4_CUT_Pin|LEDD2_Pin|LEDD1_Pin
                           |LEDA3_Pin|LEDA4_Pin|LEDBPWM_Pin|LEDD3_CUT_Pin|LEDD4_Pin
                           , GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, LEDA1_Pin|LEDA2_Pin, GPIO_PIN_SET); //WT.EDIT UV1 and UV2 is high don't works.              
 
   /*Configure GPIOB pin Output Level */
   HAL_GPIO_WritePin(GPIOB, LEDCPWM_Pin|LEDDPWM_Pin, GPIO_PIN_RESET);
@@ -81,7 +82,7 @@ void MX_GPIO_Init(void)
 
   /*Configure GPIOB pins : LEDA7_Pin LEDA8_Pin LEDBPWM_Pin LEDB4_Pin
                            LEDB5_Pin LEDB6_Pin LEDB7_Pin */
-  GPIO_InitStruct.Pin = LEDCPWM_Pin|LEDDPWM_Pin|LEDD2_EN_Pin;
+  GPIO_InitStruct.Pin = LEDCPWM_Pin|LEDDPWM_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -89,7 +90,7 @@ void MX_GPIO_Init(void)
   
   
   //Configure GPIOB PB5,PB0 INPUT pins--
-  GPIO_InitStruct.Pin = LEDCON_LR_Pin| GPIO_PIN_0;
+  GPIO_InitStruct.Pin = LEDCON_LR_Pin| GPIO_PIN_0|LEDD2_EN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;//GPIO_PULLDOWN;//GPIO_NOPULL;
   //GPIO_InitStruct.Speed =  GPIO_SPEED_FREQ_MEDIUM;

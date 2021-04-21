@@ -20,7 +20,7 @@ void BlueLed(void);
 
 void RedGreenBlue_LED_Com(void);
 
-
+void RunModeProcess(void);
 
 typedef struct _ledabled_
 {
@@ -37,6 +37,7 @@ typedef struct _ledabled_
   uint8_t pwmDutyCycle_ch2;
   uint8_t pwmDutyCycle_ch3;
   uint8_t pwmDutyCycle_ch4;
+  uint8_t RunMode ;
     
 }led;
 

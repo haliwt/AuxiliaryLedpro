@@ -57,14 +57,11 @@
 #define LEDD4_CUT_Pin 				  	GPIO_PIN_7  //PA7 ---current increase The fourth group led number 4
 #define LEDD4_CUT_GPIO_Port 			GPIOA
 
-#define LEDD2_EN_Pin              GPIO_PIN_8    //PB8 is LEDD2 and LEDD1 Enable control
-#define LEDD2_EN_GPIO_PORT           GPIOB 
-
-#define LEDD2_Pin 						GPIO_PIN_11  //PA11
+#define LEDD2_Pin 						 GPIO_PIN_11  //PA11
 #define LEDD2_GPIO_Port 				GPIOA
 
-#define LEDD1_Pin 						GPIO_PIN_12  //PA12 --red led
-#define LEDD1_GPIO_Port 			GPIOA
+#define LEDD1_Pin 						 GPIO_PIN_12  //PA12 --red led
+#define LEDD1_GPIO_Port 			 GPIOA
 
 #define LEDD4_Pin 					    GPIO_PIN_8 //PA8  --
 #define LEDD4_GPIO_Port 				GPIOA
@@ -72,9 +69,12 @@
 #define LEDD3_Pin            		    GPIO_PIN_6  //PC6
 #define LEDD3_GPIO_Port       			GPIOC
 
-//To control left board led and right board led 
+//To control left board led and right board led GPIO INPUT 
 #define LEDCON_LR_Pin 					GPIO_PIN_5  //PB5
 #define LEDCON_LR_GPIO_Port 			GPIOB
+
+#define LEDD2_EN_Pin              GPIO_PIN_8    //PB8 is LEDD2 and LEDD1 Enable control
+#define LEDD2_EN_GPIO_PORT         GPIOB 
 
 /* USER CODE BEGIN Private defines */
 

@@ -8,7 +8,7 @@ static uint8_t BCC_CHECK(void);
 static void RedLed_Off(void);
 static void GreenLed_Off(void);
 static void BlueLed_Off(void);
-static void PwmDutyCal(void);
+
 
 /*************************************************************************
  	*
@@ -20,7 +20,7 @@ static void PwmDutyCal(void);
 ******************************************************************************/
 void SingleLed_Test(void)
 {
-    uint8_t temp,i;
+    uint8_t temp;
 	uint8_t cmdType_0 = aRxBuffer[0]; //command order 1
 	uint8_t cmdType_1 = aRxBuffer[1]; //command order 1
 	//uint8_t cmdType_2 = aRxBuffer[2];	  //led turn on or off command --main board 
@@ -103,7 +103,7 @@ void SingleLed_Test(void)
 ******************************************************************************/
 void TheFirstGroup_SingleLEDA(void)
 {
-        static uint8_t pwmVal;
+       
 	    if (ledab.led_by_cd > 0x14 )
         {
           TurnOff_TheFirstLedA();
@@ -313,7 +313,7 @@ void TheFourthGroup_SingleLEDD(void)
 
 			break;
 
-      case 0x41:
+      case 0x41:  //UV_1 LED
 				ledab.runstep =0x41;
 				HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
 			    TurnOff_TheFourthLedD();
@@ -322,18 +322,28 @@ void TheFourthGroup_SingleLEDD(void)
 			    TurnOff_TheThirdLedC();
 	      
 				HAL_Delay(20);
-				//1.turn on LEDB1 =1
-         		HAL_GPIO_WritePin(LEDD1_GPIO_Port, LEDD1_Pin, GPIO_PIN_SET);
-				HAL_GPIO_WritePin(LEDD2_EN_GPIO_PORT,LEDD2_EN_Pin,GPIO_PIN_RESET); //control LEDD1 ad LEDD2 Enable pin
-				 ledab.pwmDutyCycle_ch4 = aRxBuffer[6];
-				 MX_TIM3_Init();
-	            HAL_UART_Transmit(&huart1,&aRxBuffer[5],1, 2);
-				HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
-			
-			  
+				//1.UV_1 LED by control 
+				if(HAL_GPIO_ReadPin(LEDD2_EN_GPIO_PORT,LEDD2_EN_Pin)==1){//read LEDD2_EN 
+
+				      ledab.runstep =0x4A;
+				      HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
+					  HAL_GPIO_WritePin(GPIOA, LEDD1_Pin , GPIO_PIN_SET); //
+					  HAL_TIM_PWM_Stop(&htim3,TIM_CHANNEL_1) ;
+				}
+				else if(HAL_GPIO_ReadPin(LEDD2_EN_GPIO_PORT,LEDD2_EN_Pin)==0){
+					ledab.runstep =0x4B;
+				    HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2); 
+					HAL_GPIO_WritePin(LEDD1_GPIO_Port, LEDD1_Pin, GPIO_PIN_RESET); //Low -works
+					
+					ledab.pwmDutyCycle_ch4 = aRxBuffer[6];
+					MX_TIM3_Init();
+					HAL_UART_Transmit(&huart1,&aRxBuffer[5],1, 2);
+					HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
+				}
+			    ledab.RunMode = 0x41;
                 break;
 
-            case 0x42:
+            case 0x42: //UV_2 LED
 				ledab.runstep =0x42;
 				HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
 				 TurnOff_TheFourthLedD();
@@ -343,15 +353,20 @@ void TheFourthGroup_SingleLEDD(void)
 	        
 				HAL_Delay(20);
 
-				//turn on LEDB1
-				HAL_GPIO_WritePin(LEDD2_GPIO_Port, LEDD2_Pin, GPIO_PIN_SET);
-				HAL_GPIO_WritePin(LEDD2_EN_GPIO_PORT,LEDD2_EN_Pin,GPIO_PIN_RESET); //control LEDD1 ad LEDD2 Enable pin
-				 ledab.pwmDutyCycle_ch4 = aRxBuffer[6];
-				 MX_TIM3_Init();
-        		HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
+				//UV_2 led by control 
+				if(HAL_GPIO_ReadPin(LEDD2_EN_GPIO_PORT,LEDD2_EN_Pin)==1){
+						 HAL_GPIO_WritePin(GPIOA, LEDD2_Pin , GPIO_PIN_SET); //
+						HAL_TIM_PWM_Stop(&htim3,TIM_CHANNEL_1) ;
+				}
+				else{
+					HAL_GPIO_WritePin(LEDD2_GPIO_Port, LEDD2_Pin, GPIO_PIN_RESET);
+					
+					ledab.pwmDutyCycle_ch4 = aRxBuffer[6];
+					MX_TIM3_Init();
+					HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
 				//HAL_Delay(100);
-				
-		
+				}
+				 ledab.RunMode = 0x42;
                 break;
 			
 			  case 0x43:
@@ -459,9 +474,9 @@ void TurnOff_TheFourthLedD(void)
 	 //turn off LEDA LED
 	  HAL_TIM_PWM_Stop(&htim3,TIM_CHANNEL_1) ; //HAL_GPIO_WritePin(LEDAPWM_GPIO_Port, LEDAPWM_Pin, GPIO_PIN_RESET);//TIM2_CH2
 	  HAL_Delay(20);
-     HAL_GPIO_WritePin(GPIOA, LEDD1_Pin | LEDD2_Pin | LEDD4_Pin , GPIO_PIN_RESET);
+     HAL_GPIO_WritePin(GPIOA,  LEDD4_Pin , GPIO_PIN_RESET);
 	 HAL_GPIO_WritePin(GPIOC, LEDD3_Pin , GPIO_PIN_RESET);
-	 HAL_GPIO_WritePin(GPIOB, LEDD2_EN_Pin , GPIO_PIN_SET); //control LEDD2 and LEDD3 by enable SET =1 OFF
+	 HAL_GPIO_WritePin(GPIOA, LEDD1_Pin | LEDD2_Pin  , GPIO_PIN_SET); //
 }
 /*************************************************************************
  	*
@@ -733,14 +748,66 @@ void RedGreenBlue_LED_Com(void)
 
 			  break;
 		 
-		 
-		 
 		 }
-	
-	
-	}
-    
-
-
+    }
 }
 
+void RunModeProcess(void)
+{
+   switch(ledab.RunMode){
+
+	case 0:
+
+
+	break;
+ 
+    case 0x41:
+		//1.UV_1 LED by control 
+				if(HAL_GPIO_ReadPin(LEDD2_EN_GPIO_PORT,LEDD2_EN_Pin)==1){//read LEDD2_EN 
+
+				    
+					  HAL_GPIO_WritePin(GPIOA, LEDD1_Pin , GPIO_PIN_SET); //
+					  HAL_TIM_PWM_Stop(&htim3,TIM_CHANNEL_1) ;
+				}
+				else {
+					
+					HAL_GPIO_WritePin(LEDD1_GPIO_Port, LEDD1_Pin, GPIO_PIN_RESET); //Low -works
+					
+					ledab.pwmDutyCycle_ch4 = aRxBuffer[6];
+					MX_TIM3_Init();
+					HAL_UART_Transmit(&huart1,&aRxBuffer[5],1, 2);
+					HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
+				}
+
+	break;
+
+	case 0x42:
+			//UV_2 led by control 
+				if(HAL_GPIO_ReadPin(LEDD2_EN_GPIO_PORT,LEDD2_EN_Pin)==1){
+						 HAL_GPIO_WritePin(GPIOA, LEDD2_Pin , GPIO_PIN_SET); //
+						HAL_TIM_PWM_Stop(&htim3,TIM_CHANNEL_1) ;
+				}
+				else{
+					HAL_GPIO_WritePin(LEDD2_GPIO_Port, LEDD2_Pin, GPIO_PIN_RESET);
+					
+					ledab.pwmDutyCycle_ch4 = aRxBuffer[6];
+					MX_TIM3_Init();
+					HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
+				//HAL_Delay(100);
+				}
+
+	break;
+
+
+			}
+
+
+   
+ }
+ 
+
+ 
+ 
+ 
+
+   
