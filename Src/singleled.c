@@ -37,7 +37,7 @@ void SingleLed_Test(void)
 			if(cmdType_7 == temp)//if(cmdType_6 == temp)
 			{
 				
-				if((HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_0) ==0)&&(ledab.led_LR_id  == 0x10)){ //ledab.led_LR_id == 0xff){
+				if((HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_5) ==0)&&(ledab.led_LR_id  == 0x10)){ //ledab.led_LR_id == 0xff){
 
 					ledab.runstep =0x0A;
 					HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
@@ -48,9 +48,9 @@ void SingleLed_Test(void)
 					TheFourthGroup_SingleLEDD();
 					//compound mode
 					RedGreenBlue_LED_Com();
-					ledab.led_LR_id=0;
+					
 				}
-				else if(HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_0) ==1 && (ledab.led_LR_id  == 0x01)){
+				else if(HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_5) ==1 && (ledab.led_LR_id  == 0x01)){
 					ledab.runstep =0x0B;
 					HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
 				    TheFirstGroup_SingleLEDA();
@@ -59,7 +59,7 @@ void SingleLed_Test(void)
 					TheFourthGroup_SingleLEDD();
 					//compound mode
 					RedGreenBlue_LED_Com();
-					ledab.led_LR_id=0;
+					
 				}
 				else if(ledab.led_LR_id == 0x11){
 					
@@ -81,16 +81,12 @@ void SingleLed_Test(void)
 				 
 			}
 			else{
-			   for(i=0;i<8;i++)
-			      aRxBuffer[i]=0;
 			  return ;
 			}
 				
 		}
 	 }
 	else{
-	    for(i=0;i<8;i++)
-		aRxBuffer[i]=0;
 		return ;
 	
 	}
