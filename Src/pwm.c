@@ -21,9 +21,9 @@ void MX_TIM1_Init(void)
   TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
 
   htim1.Instance = TIM1;
-  htim1.Init.Prescaler = 4-1;
+  htim1.Init.Prescaler = 2-1;  //CK_CNT = 16MHz/(pre+1) = 8MHz
   htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim1.Init.Period = 100 -1 ;
+  htim1.Init.Period = 100 -1 ; //pwm of frequency = CN_CNT/100 = 8MHZ/100 =80KHz
   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim1.Init.RepetitionCounter = 0;
   htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
@@ -93,7 +93,7 @@ void MX_TIM2_Init(void)
   TIM_OC_InitTypeDef sConfigOC_3 = {0}; //PA2  -TIM2_CH3
   
   htim2.Instance =TIM2 ; 
-  htim2.Init.Prescaler = 4-1; //ck_cnt = 16MHz /(PSC + 1)
+  htim2.Init.Prescaler = 2-1; //ck_cnt = 16MHz /(PSC + 1)
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim2.Init.Period = 100 -1 ; //Fpwm = ck_cnt / Period = 
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -152,7 +152,7 @@ void MX_TIM3_Init(void)
   TIM_OC_InitTypeDef sConfigOC = {0};
 
   htim3.Instance =TIM3;
-  htim3.Init.Prescaler = 4-1; //ck_cnt = 16MHz /(PSC + 1)
+  htim3.Init.Prescaler = 2-1; //ck_cnt = 16MHz /(PSC + 1)
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim3.Init.Period = 100 -1 ; //Fpwm = ck_cnt / Period = 
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
