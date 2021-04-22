@@ -8,7 +8,7 @@ static uint8_t BCC_CHECK(void);
 static void RedLed_Off(void);
 static void GreenLed_Off(void);
 static void BlueLed_Off(void);
-
+ static void UV_Led_Function(uint8_t uvVal);
 
 /*************************************************************************
  	*
@@ -751,62 +751,79 @@ void RedGreenBlue_LED_Com(void)
 		 }
     }
 }
-
+/*************************************************************************
+ 	*
+	*Function Name: void RunModeProcess(void)
+	*Function : 
+	*Input Ref: NO
+	*Output Ref:No
+	*
+******************************************************************************/
 void RunModeProcess(void)
 {
-   switch(ledab.RunMode){
-
-	case 0:
-
-
-	break;
- 
-    case 0x41:
-		//1.UV_1 LED by control 
-				if(HAL_GPIO_ReadPin(LEDD2_EN_GPIO_PORT,LEDD2_EN_Pin)==1){//read LEDD2_EN 
-
-				    
-					  HAL_GPIO_WritePin(GPIOA, LEDD1_Pin , GPIO_PIN_SET); //
-					  HAL_TIM_PWM_Stop(&htim3,TIM_CHANNEL_1) ;
-				}
-				else {
-					
-					HAL_GPIO_WritePin(LEDD1_GPIO_Port, LEDD1_Pin, GPIO_PIN_RESET); //Low -works
-					
-					ledab.pwmDutyCycle_ch4 = aRxBuffer[6];
-					MX_TIM3_Init();
-					HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
-				}
-
-	break;
-
-	case 0x42:
-			//UV_2 led by control 
-				if(HAL_GPIO_ReadPin(LEDD2_EN_GPIO_PORT,LEDD2_EN_Pin)==1){
-						 HAL_GPIO_WritePin(GPIOA, LEDD2_Pin , GPIO_PIN_SET); //
-						HAL_TIM_PWM_Stop(&htim3,TIM_CHANNEL_1) ;
-				}
-				else{
-					HAL_GPIO_WritePin(LEDD2_GPIO_Port, LEDD2_Pin, GPIO_PIN_RESET);
-					
-					ledab.pwmDutyCycle_ch4 = aRxBuffer[6];
-					MX_TIM3_Init();
-					HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
-				//HAL_Delay(100);
-				}
-
-	break;
-
-
-			}
-
-
    
+    ledab.led_LR_id = aRxBuffer[5];
+   if((HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_5) ==0)&&(ledab.led_LR_id  == 0x10)){
+        UV_Led_Function(ledab.RunMode);
+   }
+   if(HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_5) ==1 && (ledab.led_LR_id  == 0x01)){
+       UV_Led_Function(ledab.RunMode);
+   }
+   if(ledab.led_LR_id  == 0x11){
+     UV_Led_Function(ledab.RunMode);
+   }
  }
- 
 
- 
- 
- 
 
+ static void UV_Led_Function(uint8_t uvVal)
+ {
+
+	 switch(uvVal){
+
+		case 0:
+
+
+		break;
+	
+		case 0x41:
+			//1.UV_1 LED by control 
+					if(HAL_GPIO_ReadPin(LEDD2_EN_GPIO_PORT,LEDD2_EN_Pin)==1){//read LEDD2_EN 
+
+						
+						HAL_GPIO_WritePin(GPIOA, LEDD1_Pin , GPIO_PIN_SET); //
+						HAL_TIM_PWM_Stop(&htim3,TIM_CHANNEL_1) ;
+					}
+					else {
+						
+						HAL_GPIO_WritePin(LEDD1_GPIO_Port, LEDD1_Pin, GPIO_PIN_RESET); //Low -works
+						
+						ledab.pwmDutyCycle_ch4 = aRxBuffer[6];
+						MX_TIM3_Init();
+						HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
+					}
+
+		break;
+
+		case 0x42:
+				//UV_2 led by control 
+					if(HAL_GPIO_ReadPin(LEDD2_EN_GPIO_PORT,LEDD2_EN_Pin)==1){
+							HAL_GPIO_WritePin(GPIOA, LEDD2_Pin , GPIO_PIN_SET); //
+							HAL_TIM_PWM_Stop(&htim3,TIM_CHANNEL_1) ;
+					}
+					else{
+						HAL_GPIO_WritePin(LEDD2_GPIO_Port, LEDD2_Pin, GPIO_PIN_RESET);
+						
+						ledab.pwmDutyCycle_ch4 = aRxBuffer[6];
+						MX_TIM3_Init();
+						HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
+					//HAL_Delay(100);
+					}
+
+		break;
+
+
+		}
+
+}
+ 
    
