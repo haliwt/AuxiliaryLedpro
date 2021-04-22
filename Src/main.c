@@ -70,7 +70,7 @@ int main(void)
 //			if (HAL_UART_Transmit_IT(&huart1, (uint8_t *)aRxBuffer, RXBUFFERSIZE) != HAL_OK){
 //			      Error_Handler();
 //			 }
-			 HAL_UART_Transmit(&huart1,(uint8_t *)aRxBuffer,8, 2);
+			 HAL_UART_Transmit(&huart1,(uint8_t *)aRxBuffer,8, 10);
 		 
 		}
 		RunModeProcess();

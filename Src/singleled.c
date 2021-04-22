@@ -775,7 +775,6 @@ void RunModeProcess(void)
 					
 					ledab.pwmDutyCycle_ch4 = aRxBuffer[6];
 					MX_TIM3_Init();
-					HAL_UART_Transmit(&huart1,&aRxBuffer[5],1, 2);
 					HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
 				}
 
