@@ -39,6 +39,7 @@ void SingleLed_Test(void)
 				
 				if((HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_5) ==0)&&(ledab.led_LR_id  == 0x10)){ //ledab.led_LR_id == 0xff){
 
+					ledab.RunMode=0;
 					ledab.runstep =0x0A;
 					HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
 			
@@ -51,6 +52,7 @@ void SingleLed_Test(void)
 					
 				}
 				else if(HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_5) ==1 && (ledab.led_LR_id  == 0x01)){
+					ledab.RunMode=0;
 					ledab.runstep =0x0B;
 					HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
 				    TheFirstGroup_SingleLEDA();
@@ -63,6 +65,7 @@ void SingleLed_Test(void)
 				}
 				else if(ledab.led_LR_id == 0x11){
 					
+					ledab.RunMode=0;
 					ledab.runstep =0X0C;
 					HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
 			
