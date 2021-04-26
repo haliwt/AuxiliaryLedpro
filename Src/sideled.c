@@ -426,10 +426,27 @@ void AdjustBrigtness_Led(uint8_t ledNum)
 **************************************************************************************/
 void TurnOffAll_Led(void)
 {
-    	TurnOff_TheSecondLedB();
-        TurnOff_TheThirdLedC();
-        TurnOff_TheFourthLedD();
-        TurnOff_TheFirstLedA();
+    	if((HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_5) ==0) && (ledab.led_LR_id==1)){
+			TurnOff_TheSecondLedB();
+			TurnOff_TheThirdLedC();
+			TurnOff_TheFourthLedD();
+			TurnOff_TheFirstLedA();
+		}
+		if(HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_5) ==1 && ledab.led_LR_id==2){
+		
+		    TurnOff_TheSecondLedB();
+			TurnOff_TheThirdLedC();
+			TurnOff_TheFourthLedD();
+			TurnOff_TheFirstLedA();
+		
+		
+		}
+		if(ledab.led_LR_id==3){
+		    TurnOff_TheSecondLedB();
+			TurnOff_TheThirdLedC();
+			TurnOff_TheFourthLedD();
+			TurnOff_TheFirstLedA();
+		}
 
 
 }
