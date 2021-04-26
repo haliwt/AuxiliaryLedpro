@@ -503,7 +503,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	switch(state)
 	{
 	case STATE_PREAMBLE1:
-		if(aRxBuffer[0]=='V') // hex:56
+		if(aRxBuffer[0]=='V' || aRxBuffer =='Z') // hex:56
 			state=STATE_PREAMBLE2;
 		break;
 	case STATE_PREAMBLE2:
