@@ -843,10 +843,5 @@ void RunModeProcess(void)
 					}
 
 		break;
-
-
-		}
-
+			}
 }
- 
-   

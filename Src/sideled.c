@@ -123,13 +123,6 @@ static void SideLed_OnOff(uint8_t ledNum,uint8_t onoff)
                 ledab.RunMode=0;
                 Order_SideLed(ledNum);
             }
-            else if(ledab.led_LR_id==4){
-                     ledab.RunMode=0;
-                    TurnOff_TheSecondLedB();
-                    TurnOff_TheThirdLedC();
-                    TurnOff_TheFourthLedD();
-                    TurnOff_TheFirstLedA();
-            }
 
        
     }
@@ -503,7 +496,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	switch(state)
 	{
 	case STATE_PREAMBLE1:
-		if(aRxBuffer[0]=='V' || aRxBuffer =='Z') // hex:56
+		if(aRxBuffer[0]=='V' || aRxBuffer[0] =='Z') // hex:56
 			state=STATE_PREAMBLE2;
 		break;
 	case STATE_PREAMBLE2:
