@@ -4,12 +4,12 @@
 #include "gpio.h"
 #include "singleled.h"
 
-#define LEVEL_DEFAULT	  80//14
-#define LEVEL_MAX		  100//20
-#define LEVEL_MIN		   8
-#define LEVEL_ZERO		  0
-#define LEVEL_STEP		   6
-#define LEVEL_PWM_STEP	   50
+#define LEVEL_DEFAULT	  14
+#define LEVEL_MAX		  20
+#define LEVEL_MIN		   0
+#define LEVEL_ZERO		   0
+#define LEVEL_STEP		   1 
+#define LEVEL_PWM_STEP	   1
 #define LEVEL_PWM_MAX	    100
 
 #define BUFFER_SIZE     8

@@ -27,9 +27,14 @@ static uint8_t decodeFlag;
 static uint8_t cmdSize;
 static uint8_t paraIndex;
 static uint8_t crcCheck;
-static uint8_t level;
+
+static uint8_t group;
 static uint8_t hasLedOn;
 static uint8_t lastOnLed=0xff;
+static uint8_t level_a;
+static uint8_t level_b;
+static uint8_t level_c;
+static uint8_t level_d;
 
 
 static void RunCmd(void);
@@ -103,7 +108,7 @@ static void SideLed_OnOff(uint8_t ledNum,uint8_t onoff)
 
         lastOnLed = ledNum;
         hasLedOn =1;
-        level = LEVEL_DEFAULT;
+        group = ledNum;
 
            if((HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_5) ==0) && (ledab.led_LR_id==1)){ 
                 ledab.RunMode=0;
@@ -141,7 +146,7 @@ void Order_SideLed(uint8_t orderLed)
 {
        switch(orderLed){
 
-          case 0:
+          case 1:
 			    ledab.runstep =0x11;
 				HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
 				TurnOff_TheSecondLedB();
@@ -156,11 +161,11 @@ void Order_SideLed(uint8_t orderLed)
 			//    ledab.pwmDutyCycle_ch1 = aRxBuffer[6] ;
 			//     MX_TIM2_Init();
             //     HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3) ;  //the first group 
-			    setLevel_A( level);
+			    setLevel_A( level_a);
                 
                 break;
 
-            case 1:
+            case 2:
 			     ledab.runstep =0x12;
 				HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
 				TurnOff_TheSecondLedB();
@@ -173,10 +178,10 @@ void Order_SideLed(uint8_t orderLed)
 				//  ledab.pwmDutyCycle_ch1 = aRxBuffer[6] ;
 				//   MX_TIM2_Init();
 				//  HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3) ;
-				 setLevel_A( level);
+				 setLevel_A(level_a);
                 break;
 
-            case 2:
+            case 3:
 			     ledab.runstep =0x13;
 				HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
 				TurnOff_TheSecondLedB();
@@ -190,54 +195,57 @@ void Order_SideLed(uint8_t orderLed)
 				//   MX_TIM2_Init();
 				// //2. enable
 				//  HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3) ;
-				 setLevel_A(level);
+				 setLevel_A(level_a);
                 break;
 
-            case 3:
+            case 4:
 				ledab.runstep =0x14;
 				HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
 				TurnOff_TheSecondLedB();
 			    TurnOff_TheThirdLedC();
 			    TurnOff_TheFourthLedD();
 				TurnOff_TheFirstLedA();
-				HAL_Delay(100);
+				HAL_Delay(20);
                 //turn on LEDA4
                 HAL_GPIO_WritePin(LEDA4_GPIO_Port, LEDA4_Pin, GPIO_PIN_SET);
 				//  ledab.pwmDutyCycle_ch1 = aRxBuffer[6];
 				//   MX_TIM2_Init();
 			    // //2 .EN
 				//  HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3) ;
-				 setLevel_A( level);
+				 setLevel_A(level_a);
                 break;
+
                 //the second group led 
-                case 4:
+                case 5:
                     TurnOff_TheSecondLedB();
                     TurnOff_TheThirdLedC();
                     TurnOff_TheFourthLedD();
                     TurnOff_TheFirstLedA();
-                    HAL_Delay(100);
+                    HAL_Delay(20);
                     // ledab.pwmDutyCycle_ch2 = aRxBuffer[6];
                     //   MX_TIM2_Init();
                     // HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1); //TIM2_CH1 the second group
                     //PA15-22PIN--the second group pwm ----Green
-                    setLevel_B( level);
+                    setLevel_B(level_b);
                 break;
+
                 //the third group led
-                case 5: //the third group only Pwm control  //PB3 --TIM1-CH2 -AF1
+                case 6: //the third group only Pwm control  //PB3 --TIM1-CH2 -AF1
                     TurnOff_TheSecondLedB();
                     TurnOff_TheThirdLedC();
                     TurnOff_TheFourthLedD();
                     TurnOff_TheFirstLedA();
-                    HAL_Delay(100);
+                    HAL_Delay(20);
                     // ledab.pwmDutyCycle_ch3 = aRxBuffer[6];
                     // MX_TIM1_Init();
                     // HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2); //TIM1_CH2 PB3 the third group
                     //PB3-23PIN --the third gropu pwm ---Blue
-                    setLevel_C( level);
+                    setLevel_C(level_c);
                 break;
+
                 //the fourth group led 
 
-                case 6:  //UV_1 LED
+                case 7:  //UV_1 LED
                     ledab.runstep =0x41;
                     HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
                     TurnOff_TheFourthLedD();
@@ -262,13 +270,13 @@ void Order_SideLed(uint8_t orderLed)
                         // ledab.pwmDutyCycle_ch4 = aRxBuffer[6];
                         // MX_TIM3_Init();
                         // HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
-                        setLevel_D( level);
+                        setLevel_D( level_d);
                         HAL_UART_Transmit(&huart1,&aRxBuffer[5],1, 2);
                     }
                     ledab.RunMode = 0x41;
                 break;
 
-                case 7: //UV_2 LED
+                case 8: //UV_2 LED
                     ledab.runstep =0x42;
                     HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
                     TurnOff_TheFourthLedD();
@@ -289,13 +297,13 @@ void Order_SideLed(uint8_t orderLed)
                         // ledab.pwmDutyCycle_ch4 = aRxBuffer[6];
                         // MX_TIM3_Init();
                         // HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
-                        setLevel_D( level);
+                        setLevel_D(level_d);
                     //HAL_Delay(100);
                     }
                     ledab.RunMode = 0x42;
                 break;
 			
-                case 8:
+                case 9:
                     ledab.runstep =0x43;
                     HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
                     TurnOff_TheFourthLedD();
@@ -310,10 +318,10 @@ void Order_SideLed(uint8_t orderLed)
                     //  ledab.pwmDutyCycle_ch4 = aRxBuffer[6];
                     //  MX_TIM3_Init();
                     //  HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
-                    setLevel_D( level);
+                    setLevel_D(level_d);
                 break;
 			  
-			    case 9:
+			    case 10:
                     ledab.runstep =0x44;
                     HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
                     TurnOff_TheFourthLedD();
@@ -327,7 +335,7 @@ void Order_SideLed(uint8_t orderLed)
                     // ledab.pwmDutyCycle_ch4 = aRxBuffer[6];
                     // MX_TIM3_Init();
                     // HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
-                    setLevel_D( level);
+                    setLevel_D(level_d);
 			  
                  break;
                 
@@ -383,37 +391,68 @@ void setLevel_D(uint8_t level)
   * Return Ref:NO
 *
 **************************************************************************************/
-void AdjustBrigtness_Led(uint8_t ledNum)
+void AdjustBrigtness_Led(uint8_t dir)
 {
-     //left side led
-           if(HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_5) ==0 &&  ledab.led_LR_id==1){ 
+    if(hasLedOn)
+	{
+		if(group < 5 && group !=0){
+			if(dir=='1')	// adj +
+			{
+				level_a+=LEVEL_STEP;
+				if(level_a>LEVEL_PWM_MAX ) level_a=LEVEL_PWM_MAX ;
+			}
+			else	// adj -
+			{
+				if(level_a<=0)	level_a=LEVEL_MIN;
+				else 	level_a-=LEVEL_STEP;
+			}
+			setLevel_A(level_a);
+		}
+        if(group == 5){
 
-               	    TheFirstGroup_SingleLEDA();
-					TheSecondGroup_SingleLEDB();
-					TheThirdGroup_SingleLEDC();
-					TheFourthGroup_SingleLEDD();
-					//compound mode
-					RedGreenBlue_LED_Com();
-            }
-           else if(HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_5) ==1 && ledab.led_LR_id==2){ //right side led
-                    TheFirstGroup_SingleLEDA();
-					TheSecondGroup_SingleLEDB();
-					TheThirdGroup_SingleLEDC();
-					TheFourthGroup_SingleLEDD();
-					//compound mode
-					RedGreenBlue_LED_Com();
+            if(dir=='1')	// adj +
+			{
+				level_b+=LEVEL_STEP;
+				if(level_b>LEVEL_PWM_MAX ) level_b=LEVEL_PWM_MAX ;
+			}
+			else	// adj -
+			{
+				if(level_b<=0)	level_b=LEVEL_MIN;
+				else 	level_b-=LEVEL_STEP;
+			}
+			setLevel_B(level_b);
 
 
-           }
-           if(ledab.led_LR_id==3){ //both side led  ON
+        }
+        if(group ==6){
+            if(dir=='1')	// adj +
+			{
+				level_c+=LEVEL_STEP;
+				if(level_c>LEVEL_PWM_MAX ) level_c=LEVEL_PWM_MAX ;
+			}
+			else	// adj -
+			{
+				if(level_c<=0)	level_c=LEVEL_MIN;
+				else 	level_c-=LEVEL_STEP;
+			}
+			setLevel_C(level_c);
 
-                    TheFirstGroup_SingleLEDA();
-					TheSecondGroup_SingleLEDB();
-					TheThirdGroup_SingleLEDC();
-					TheFourthGroup_SingleLEDD();
-					//compound mode
-					RedGreenBlue_LED_Com();
-		   }
+
+        }
+		if(group > 6 && group < 11){
+			if(dir=='1')	// adj +
+			{
+				level_d+=LEVEL_STEP;
+				if(level_d>LEVEL_PWM_MAX ) level_d=LEVEL_PWM_MAX ;
+			}
+			else	// adj -
+			{
+				if(level_d<=0)	level_d=LEVEL_MIN;
+				else 	level_d-=LEVEL_STEP;
+			}
+		      setLevel_D(level_d);
+		}
+	}
 
 }
 /*************************************************************************************
@@ -495,11 +534,12 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 		{
 			state=STATE_PREAMBLE1;
 		}
-		else if(cmdSize>0)
+		else if(cmdSize>0 )
 		{
 			paraIndex=1;
-			crcCheck ^= aRxBuffer[0];
-			state=STATE_PARA;
+            crcCheck ^= aRxBuffer[0];
+            state=STATE_PARA;
+            
 		}
 		else	// no parameter
 		{
@@ -515,7 +555,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 		cmdSize--;
 		if(cmdSize==0)
 		{
-			ledab.led_LR_id=inputCmd[1] - 0x30;
+			if(inputCmd[0] !='A')
+                ledab.led_LR_id=inputCmd[1] - 0x30;
             HAL_UART_Transmit(&huart1,&inputCmd[1],1,2);
 			HAL_UART_Transmit(&huart1,&inputCmd[2],1,2);
             HAL_UART_Transmit(&huart1,&inputCmd[3],1,2);
