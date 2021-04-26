@@ -14,6 +14,7 @@
 #include "gpio.h"
 #include "singleled.h"
 #include "pwm.h"
+#include "sideled.h"
 
 
 void SystemClock_Config(void);
@@ -51,32 +52,17 @@ int main(void)
 	MX_TIM1_Init();
 	MX_TIM3_Init();
   /* USER CODE BEGIN WHILE */
+	HAL_UART_Abort(&huart1);
+	HAL_UART_Receive_IT(&huart1,aRxBuffer, 7);
+	//setLevel(LEVEL_ZERO);
   while (1)
   {
 		
-	 
-
-	  /* USER CODE END WHILE */
-		if (HAL_UART_Receive_IT(&huart1, (uint8_t *)aRxBuffer, RXBUFFERSIZE) != HAL_OK)
-		{
-		  Error_Handler();
-		}
-		else{
-        
-
-            ledab.left_side = ReadLR_Control();
-			
-			   SingleLed_Test() ; //TestMode
-//			if (HAL_UART_Transmit_IT(&huart1, (uint8_t *)aRxBuffer, RXBUFFERSIZE) != HAL_OK){
-//			      Error_Handler();
-//			 }
-			 HAL_UART_Transmit(&huart1,(uint8_t *)aRxBuffer,8, 10);
-		 
-		}
-		RunModeProcess();
+	  ledab.left_side = ReadLR_Control();
+		DecodeTestCase();
+	  RunModeProcess();
 				
-		
-  }
+	}
   
 }
 

@@ -2,6 +2,7 @@
 #include "gpio.h"
 #include "usart.h"
 #include "pwm.h"
+#include "sideled.h"
 
 led ledab;
 static uint8_t BCC_CHECK(void);
@@ -135,9 +136,10 @@ void TheFirstGroup_SingleLEDA(void)
 			    HAL_GPIO_WritePin(LEDA1_GPIO_Port, LEDA1_Pin, GPIO_PIN_SET);
 			   //2.EN on
 			
-			   ledab.pwmDutyCycle_ch1 = aRxBuffer[6] ;
-			    MX_TIM2_Init();
-                HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3) ;  //the first group 
+			//    ledab.pwmDutyCycle_ch1 = aRxBuffer[6] ;
+			//     MX_TIM2_Init();
+            //     HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3) ;  //the first group 
+			    setLevel_A(aRxBuffer[6]);
                 
                 break;
 
@@ -151,9 +153,10 @@ void TheFirstGroup_SingleLEDA(void)
 				HAL_Delay(20);
                 //turn on LEDA2  
                 HAL_GPIO_WritePin(LEDA2_GPIO_Port, LEDA2_Pin, GPIO_PIN_SET);
-				 ledab.pwmDutyCycle_ch1 = aRxBuffer[6] ;
-				  MX_TIM2_Init();
-				 HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3) ;
+				//  ledab.pwmDutyCycle_ch1 = aRxBuffer[6] ;
+				//   MX_TIM2_Init();
+				//  HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3) ;
+				 setLevel_A(aRxBuffer[6]);
                 break;
 
             case 0x13:
@@ -166,10 +169,11 @@ void TheFirstGroup_SingleLEDA(void)
 				HAL_Delay(20);
                 //turn on LEDA3
                 HAL_GPIO_WritePin(LEDA3_GPIO_Port, LEDA3_Pin, GPIO_PIN_SET);
-				 ledab.pwmDutyCycle_ch1 = aRxBuffer[6] ;
-				  MX_TIM2_Init();
-				//2. enable
-				 HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3) ;
+				//  ledab.pwmDutyCycle_ch1 = aRxBuffer[6] ;
+				//   MX_TIM2_Init();
+				// //2. enable
+				//  HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3) ;
+				 setLevel_A(aRxBuffer[6]);
                 break;
 
             case 0x14:
@@ -182,10 +186,11 @@ void TheFirstGroup_SingleLEDA(void)
 				HAL_Delay(100);
                 //turn on LEDA4
                 HAL_GPIO_WritePin(LEDA4_GPIO_Port, LEDA4_Pin, GPIO_PIN_SET);
-				 ledab.pwmDutyCycle_ch1 = aRxBuffer[6];
-				  MX_TIM2_Init();
-			    //2 .EN
-				 HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3) ;
+				//  ledab.pwmDutyCycle_ch1 = aRxBuffer[6];
+				//   MX_TIM2_Init();
+			    // //2 .EN
+				//  HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3) ;
+				 setLevel_A(aRxBuffer[6]);
                 break;
 			}
         }
@@ -225,10 +230,11 @@ void TheSecondGroup_SingleLEDB(void)
 			    TurnOff_TheFourthLedD();
 			    TurnOff_TheFirstLedA();
 				HAL_Delay(100);
-				ledab.pwmDutyCycle_ch2 = aRxBuffer[6];
-				  MX_TIM2_Init();
-				HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1); //TIM2_CH1 the second group
+				// ledab.pwmDutyCycle_ch2 = aRxBuffer[6];
+				//   MX_TIM2_Init();
+				// HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1); //TIM2_CH1 the second group
 			    //PA15-22PIN--the second group pwm ----Green
+				setLevel_B(aRxBuffer[6]);
                 break;
 			default:
 				 TurnOff_TheSecondLedB();
@@ -274,10 +280,11 @@ void TheSecondGroup_SingleLEDB(void)
 			    TurnOff_TheFourthLedD();
 			    TurnOff_TheFirstLedA();
 				HAL_Delay(100);
-				ledab.pwmDutyCycle_ch3 = aRxBuffer[6];
-				MX_TIM1_Init();
-			    HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2); //TIM1_CH2 PB3 the third group
+				// ledab.pwmDutyCycle_ch3 = aRxBuffer[6];
+				// MX_TIM1_Init();
+			    // HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2); //TIM1_CH2 PB3 the third group
 			     //PB3-23PIN --the third gropu pwm ---Blue
+				 setLevel_C(aRxBuffer[6]);
                 break;
 
           
@@ -338,10 +345,11 @@ void TheFourthGroup_SingleLEDD(void)
 				    HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2); 
 					HAL_GPIO_WritePin(LEDD1_GPIO_Port, LEDD1_Pin, GPIO_PIN_RESET); //Low -works
 					
-					ledab.pwmDutyCycle_ch4 = aRxBuffer[6];
-					MX_TIM3_Init();
+					// ledab.pwmDutyCycle_ch4 = aRxBuffer[6];
+					// MX_TIM3_Init();
+					// HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
+					setLevel_D(aRxBuffer[6]);
 					HAL_UART_Transmit(&huart1,&aRxBuffer[5],1, 2);
-					HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
 				}
 			    ledab.RunMode = 0x41;
                 break;
@@ -364,9 +372,10 @@ void TheFourthGroup_SingleLEDD(void)
 				else{
 					HAL_GPIO_WritePin(LEDD2_GPIO_Port, LEDD2_Pin, GPIO_PIN_RESET);
 					
-					ledab.pwmDutyCycle_ch4 = aRxBuffer[6];
-					MX_TIM3_Init();
-					HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
+					// ledab.pwmDutyCycle_ch4 = aRxBuffer[6];
+					// MX_TIM3_Init();
+					// HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
+					setLevel_D(aRxBuffer[6]);
 				//HAL_Delay(100);
 				}
 				 ledab.RunMode = 0x42;
@@ -384,13 +393,11 @@ void TheFourthGroup_SingleLEDD(void)
 
 				//turn on LEDB1
 				HAL_GPIO_WritePin(LEDD3_GPIO_Port, LEDD3_Pin, GPIO_PIN_SET);
-				 ledab.pwmDutyCycle_ch4 = aRxBuffer[6];
-				 MX_TIM3_Init();
-                 HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
-				//HAL_Delay(100);
-				
-			
-                break;
+				//  ledab.pwmDutyCycle_ch4 = aRxBuffer[6];
+				//  MX_TIM3_Init();
+                //  HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
+				setLevel_D(aRxBuffer[6]);
+			    break;
 			  
 			    case 0x44:
 				ledab.runstep =0x44;
@@ -403,10 +410,10 @@ void TheFourthGroup_SingleLEDD(void)
 				HAL_Delay(20);
         		//turn on LEDB1
 				HAL_GPIO_WritePin(LEDD4_GPIO_Port, LEDD4_Pin, GPIO_PIN_SET);
-				ledab.pwmDutyCycle_ch4 = aRxBuffer[6];
-				MX_TIM3_Init();
-        		HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
-				//	HAL_Delay(100);
+				// ledab.pwmDutyCycle_ch4 = aRxBuffer[6];
+				// MX_TIM3_Init();
+        		// HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
+				setLevel_D(aRxBuffer[6]);
 			  
          break;
 		default:
@@ -621,21 +628,23 @@ void RedGreenBlue_LED_Com(void)
 			    TurnOff_TheThirdLedC();
 	            TurnOff_TheFourthLedD();
 			    HAL_Delay(20);
-			     colorarry[0]=aRxBuffer[6]; //rend
+			     colorarry[0]=aRxBuffer[6]; //red
 				 ledab.led_red =1;
 				 RedLed();
 			 
 			     if(ledab.led_green ==1){
-					  ledab.pwmDutyCycle_ch2 = colorarry[1] ;
-					MX_TIM2_Init();
-						HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1);//PA15-22PIN--the second group pwm ----Green
+					// ledab.pwmDutyCycle_ch2 = colorarry[1] ;
+					// MX_TIM2_Init();
+					// HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1);//PA15-22PIN--the second group pwm ----Green
 			        // GreenLed();
+					setLevel_B(colorarry[1]);
 				 }
 				if(ledab.led_blue ==1){
-					ledab.pwmDutyCycle_ch3 = colorarry[2] ;
-					MX_TIM1_Init();
-					HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);  //PB3-23PIN --the third gropu pwm ---Blue
-				 //BlueLed();
+					// ledab.pwmDutyCycle_ch3 = colorarry[2] ;
+					// MX_TIM1_Init();
+					// HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);  //PB3-23PIN --the third gropu pwm ---Blue
+					setLevel_C(colorarry[2]);
+				 
 				}
 			 break;
 
@@ -643,16 +652,18 @@ void RedGreenBlue_LED_Com(void)
                 ledab.led_red =0 ;
 				RedLed_Off();
 				if(ledab.led_green ==1){
-					ledab.pwmDutyCycle_ch2 = colorarry[1] ;
-					MX_TIM2_Init();
-					HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1);//PA15-22PIN--the second group pwm ----Green
+					// ledab.pwmDutyCycle_ch2 = colorarry[1] ;
+					// MX_TIM2_Init();
+					// HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1);//PA15-22PIN--the second group pwm ----Green
 			         //GreenLed();
+					 setLevel_B(colorarry[1]);
 				}
 				if(ledab.led_blue ==1){
-					ledab.pwmDutyCycle_ch3 = colorarry[2] ;
-					MX_TIM1_Init();
-					HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);  //PB3-23PIN --the third gropu pwm ---Blue
+					// ledab.pwmDutyCycle_ch3 = colorarry[2] ;
+					// MX_TIM1_Init();
+					// HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);  //PB3-23PIN --the third gropu pwm ---Blue
 				 //BlueLed();
+				 setLevel_C(colorarry[2]);
 		        }
 
 			 break;
@@ -670,19 +681,22 @@ void RedGreenBlue_LED_Com(void)
 			     GreenLed();
 			 
 				if(ledab.led_red ==1){
-					ledab.pwmDutyCycle_ch4 = colorarry[0] ;
-					MX_TIM3_Init();
-					HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;  //PB4 -PIN24 --the fourth group pwm
+					// ledab.pwmDutyCycle_ch4 = colorarry[0] ;
+					// MX_TIM3_Init();
+					// HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;  //PB4 -PIN24 --the fourth group pwm
+					setLevel_D(colorarry[0]);
 					HAL_GPIO_WritePin(LEDD4_GPIO_Port, LEDD4_Pin, GPIO_PIN_SET);
  						//RedLed();
+					
 				}
 				
 				
 				if(ledab.led_blue ==1){
-					ledab.pwmDutyCycle_ch3 = colorarry[2] ;
-					MX_TIM1_Init();
-					HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);  //PB3-23PIN --the third gropu pwm ---Blue
-				//BlueLed();
+					// ledab.pwmDutyCycle_ch3 = colorarry[2] ;
+					// MX_TIM1_Init();
+					// HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);  //PB3-23PIN --the third gropu pwm ---Blue
+				    //BlueLed();
+					setLevel_C(colorarry[2]);
 				} 
 			 break;
 			 case 0x54:  //turn off GreenLed OFF
@@ -690,16 +704,19 @@ void RedGreenBlue_LED_Com(void)
 				 GreenLed_Off();
 				 if(ledab.led_red ==1){
 					ledab.pwmDutyCycle_ch4 = colorarry[0] ;
-					MX_TIM3_Init();
-					HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;  //PB4 -PIN24 --the fourth group pwm
+					// MX_TIM3_Init();
+					// HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;  //PB4 -PIN24 --the fourth group pwm
+					setLevel_D(colorarry[0]);
 					HAL_GPIO_WritePin(LEDD4_GPIO_Port, LEDD4_Pin, GPIO_PIN_SET);
- 						//RedLed();
+ 					// 	//RedLed();
+					
 				}
 				if(ledab.led_blue ==1){
-					ledab.pwmDutyCycle_ch3 = colorarry[2] ;
-					MX_TIM1_Init();
-					HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);  //PB3-23PIN --the third gropu pwm ---Blue
-				//BlueLed();
+					// ledab.pwmDutyCycle_ch3 = colorarry[2] ;
+					// MX_TIM1_Init();
+					// HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);  //PB3-23PIN --the third gropu pwm ---Blue
+					//BlueLed();
+					setLevel_C(colorarry[2]);
 				} 
 
 			 break;
@@ -717,34 +734,39 @@ void RedGreenBlue_LED_Com(void)
 			    BlueLed();
 			 
 			    if(ledab.led_green ==1){
-					ledab.pwmDutyCycle_ch2 = colorarry[1] ;
-					MX_TIM2_Init();
-					HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1);//PA15-22PIN--the second group pwm ----Green
+					// ledab.pwmDutyCycle_ch2 = colorarry[1] ;
+					// MX_TIM2_Init();
+					// HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1);//PA15-22PIN--the second group pwm ----Green
 			     //GreenLed();
+				     setLevel_B(colorarry[1]);
 
 				}
 				if(ledab.led_red ==1){
-					ledab.pwmDutyCycle_ch4 = colorarry[0] ;
-					MX_TIM3_Init();
-					HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;  //PB4 -PIN24 --the fourth group pwm --Red
+					// ledab.pwmDutyCycle_ch4 = colorarry[0] ;
+					// MX_TIM3_Init();
+					// HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;  //PB4 -PIN24 --the fourth group pwm --Red
+					setLevel_D(colorarry[0]);
 					HAL_GPIO_WritePin(LEDD4_GPIO_Port, LEDD4_Pin, GPIO_PIN_SET);
-				 //RedLed();
+				    //RedLed();
+
 				}
 			  break;
 			  case 0x56:
 				ledab.led_blue =0;
 				BlueLed_Off();
 				if(ledab.led_green ==1){
-					ledab.pwmDutyCycle_ch2 = colorarry[1] ;
-					MX_TIM2_Init();
-					HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1);//PA15-22PIN--the second group pwm ----Green
+					// ledab.pwmDutyCycle_ch2 = colorarry[1] ;
+					// MX_TIM2_Init();
+					// HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1);//PA15-22PIN--the second group pwm ----Green
 			     //GreenLed();
+				   setLevel_B(colorarry[1]);
 
 				}
 				if(ledab.led_red ==1){
-					ledab.pwmDutyCycle_ch4 = colorarry[0] ;
-					MX_TIM3_Init();
-					HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;  //PB4 -PIN24 --the fourth group pwm --Red
+					// ledab.pwmDutyCycle_ch4 = colorarry[0] ;
+					// MX_TIM3_Init();
+					// HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;  //PB4 -PIN24 --the fourth group pwm --Red
+					setLevel_D(colorarry[0]);
 					HAL_GPIO_WritePin(LEDD4_GPIO_Port, LEDD4_Pin, GPIO_PIN_SET);
 				 //RedLed();
 				}
@@ -764,15 +786,13 @@ void RedGreenBlue_LED_Com(void)
 ******************************************************************************/
 void RunModeProcess(void)
 {
-   
-    ledab.led_LR_id = aRxBuffer[5];
-   if((HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_5) ==0)&&(ledab.led_LR_id  == 0x10)){
+   if((HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_5) ==0)&&(ledab.led_LR_id  == 1)){
         UV_Led_Function(ledab.RunMode);
    }
-   if(HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_5) ==1 && (ledab.led_LR_id  == 0x01)){
+   if(HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_5) ==1 && (ledab.led_LR_id  == 2)){
        UV_Led_Function(ledab.RunMode);
    }
-   if(ledab.led_LR_id  == 0x11){
+   if(ledab.led_LR_id  == 3){
      UV_Led_Function(ledab.RunMode);
    }
  }
