@@ -824,6 +824,7 @@ void RunModeProcess(void)
 						MX_TIM3_Init();
 						HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
 					}
+				uvVal = 0x42;
 
 		break;
 
@@ -841,6 +842,7 @@ void RunModeProcess(void)
 						HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
 					//HAL_Delay(100);
 					}
+				uvVal= 0x41;
 
 		break;
 			}
