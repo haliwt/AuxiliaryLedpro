@@ -21,7 +21,7 @@ uint8_t inputCmd[BUFFER_SIZE];
 //static uint8_t transBack;
 
 //static uint8_t cmd;
-static uint8_t  classID[3];
+static uint8_t  classID[4];
 static uint8_t state;
 static uint8_t decodeFlag;
 
@@ -29,25 +29,26 @@ static uint8_t cmdSize;
 static uint8_t paraIndex;
 static uint8_t crcCheck;
 
-
+static uint8_t lastOnLed_spot;
 static uint8_t hasLedOn_linear;
 static uint8_t hasLedOn_spot;
 static uint8_t lastOnLed=0xff;
 static uint8_t level_a;
 static uint8_t level_b;
 static uint8_t level_c;
-static uint8_t level_d;
 
+uint8_t level_d;
 
 static void RunCmd(void);
 static void SideLed_OnOff(uint8_t ledNum,uint8_t onoff);
 static void TurnOffAll_Led(void);
 static void AdjustBrigtness_Led(uint8_t bightVal);
 //static void Order_SideLed(uint8_t orderLed);
-static void Spot_SideLed(void);
+static void Spot_SideLed(uint8_t ledNum,uint8_t onff);
 static void Linear_SideLed(uint8_t ledNum);
 static void  BrightnessWhichOne_Linear(uint8_t bightnessVal);
 static void  BrightnessWhichOne_Spot(uint8_t bightnessVal);
+
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart);
 /*************************************************************************************
 **
@@ -81,10 +82,11 @@ void RunCmd(void)
 
         case 'O' : //0x4F -> "SPOT"board
             classID[0]= 1; //be save sport flag right board
-            
+            classID[3]=(inputCmd[2]-0x30)*10+inputCmd[3]-0x30;
+            classID[2]= (inputCmd[2]-0x30)*10+inputCmd[3]-0x30;
             //claseID[2]=ledab.led_LR_id;
             ledab.RunMode = 0;
-            Spot_SideLed();
+            Spot_SideLed(((inputCmd[2]-0x30)*10+inputCmd[3]-0x30),1);
         break;
         
         case 'S'://hex:0X56->liner LED
@@ -95,12 +97,16 @@ void RunCmd(void)
             SideLed_OnOff(((inputCmd[2]-0x30)*10+inputCmd[3]-0x30),1);
         break;
 
-        case 'C': //0X43
+        case 'C': 
+					  ledab.RunMode = 0; //WT.EDIT 2021.05.31
             TurnOffAll_Led();
          break;
 
         case 'A'://0X41
+					  ledab.RunMode = 0;
             AdjustBrigtness_Led(inputCmd[1]);
+		    if(classID[0]== 1) cmdType ='O';
+		    if(classID[0]== 2) cmdType ='S';
         break;
         default:
         break;
@@ -152,101 +158,35 @@ static void SideLed_OnOff(uint8_t ledNum,uint8_t onoff)
 }
 /*************************************************************************************
 **
-  * Function Name: void Order_SideLed(void)
-  * Function: Turn on or off side board left or right led 
+  * Function Name:void Spot_SideLed(void)
+  * Function: 
   * Input Ref: NO
   * Return Ref:NO
 *
 **************************************************************************************/
-void Order_SideLed(uint8_t orderLed)
+static void Spot_SideLed(uint8_t ledNum,uint8_t onoff)
 {
-       switch(orderLed){
+    if((lastOnLed_spot !=ledNum)||(onoff==0)){
+         TurnOffAll_Led();
+    }
 
-          case 1: //PA6 LINEAR BOARD "IR1-IR730"
-			    ledab.runstep =0x11;
-				HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
-				TurnOff_TheSecondLedB();
-			    TurnOff_TheThirdLedC();
-			    TurnOff_TheFourthLedD();
-                TurnOff_TheFirstLedA();
-				HAL_Delay(20);
-				//1.turn on LEDA1 =1
-			    HAL_GPIO_WritePin(LEDA1_GPIO_Port, LEDA1_Pin, GPIO_PIN_SET);
-			   //2.EN on
-			
-			//    ledab.pwmDutyCycle_ch1 = aRxBuffer[6] ;
-			//     MX_TIM2_Init();
-            //     HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3) ;  //the first group 
-			    setLevel_A( level_a);
-                
-                break;
-
-            case 2: //PA5 LINEAR "IR1-IR850"
-			     ledab.runstep =0x12;
-				HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
-				TurnOff_TheSecondLedB();
-			    TurnOff_TheThirdLedC();
-			    TurnOff_TheFourthLedD();
-				TurnOff_TheFirstLedA();
-				HAL_Delay(20);
-                //turn on LEDA2  
-                HAL_GPIO_WritePin(LEDA2_GPIO_Port, LEDA2_Pin, GPIO_PIN_SET);
-				//  ledab.pwmDutyCycle_ch1 = aRxBuffer[6] ;
-				//   MX_TIM2_Init();
-				//  HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3) ;
-				 setLevel_A(level_a);
-                break;
-
-            case 3://PA4 LINEAR "IR3-IR940"
-			     ledab.runstep =0x13;
-				HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
-				TurnOff_TheSecondLedB();
-			    TurnOff_TheThirdLedC();
-			    TurnOff_TheFourthLedD();
-				TurnOff_TheFirstLedA();
-				HAL_Delay(20);
-                //turn on LEDA3
-                HAL_GPIO_WritePin(LEDA3_GPIO_Port, LEDA3_Pin, GPIO_PIN_SET);
-				//  ledab.pwmDutyCycle_ch1 = aRxBuffer[6] ;
-				//   MX_TIM2_Init();
-				// //2. enable
-				//  HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3) ;
-				 setLevel_A(level_a);
-                break;
-
-            case 4://PA3 LINEAR "White"
-				ledab.runstep =0x14;
-				HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
-				TurnOff_TheSecondLedB();
-			    TurnOff_TheThirdLedC();
-			    TurnOff_TheFourthLedD();
-				TurnOff_TheFirstLedA();
-				HAL_Delay(20);
-                //turn on LEDA4
-                HAL_GPIO_WritePin(LEDA4_GPIO_Port, LEDA4_Pin, GPIO_PIN_SET);
-				//  ledab.pwmDutyCycle_ch1 = aRxBuffer[6];
-				//   MX_TIM2_Init();
-			    // //2 .EN
-				//  HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3) ;
-				 setLevel_A(level_a);
-                break;
-
-                //the second group led follow down "SPORT BOARD"
-                case 5://RGBW-G //SPOT LED
+    if(onoff){
+        lastOnLed_spot =ledNum;
+        hasLedOn_spot =1;
+        switch(ledNum){
+            //the second group led follow down "SPORT BOARD"
+                case 0://RGBW-G //SPOT LED
                     TurnOff_TheSecondLedB();
                     TurnOff_TheThirdLedC();
                     TurnOff_TheFourthLedD();
                     TurnOff_TheFirstLedA();
                     HAL_Delay(20);
-                    // ledab.pwmDutyCycle_ch2 = aRxBuffer[6];
-                    //   MX_TIM2_Init();
-                    // HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1); //TIM2_CH1 the second group
-                    //PA15-22PIN--the second group pwm ----Green
+                  
                     setLevel_B(level_b);
                 break;
 
                 //the third group led 
-                case 6://RGBW-B //SPOT //the third group only Pwm control  //PB3 --TIM1-CH2 -AF1
+                case 1://RGBW-B //SPOT //the third group only Pwm control  //PB3 --TIM1-CH2 -AF1
                     TurnOff_TheSecondLedB();
                     TurnOff_TheThirdLedC();
                     TurnOff_TheFourthLedD();
@@ -261,7 +201,7 @@ void Order_SideLed(uint8_t orderLed)
 
                 //the fourth group led 
 
-                case 7: //PB8 //SPOT  //UV310
+                case 2: //PB8 //SPOT  //UV310
                     ledab.runstep =0x41;
                     HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
                     TurnOff_TheFourthLedD();
@@ -283,16 +223,13 @@ void Order_SideLed(uint8_t orderLed)
                         HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2); 
                         HAL_GPIO_WritePin(LEDD1_GPIO_Port, LEDD1_Pin, GPIO_PIN_RESET); //Low -works
                         
-                        // ledab.pwmDutyCycle_ch4 = aRxBuffer[6];
-                        // MX_TIM3_Init();
-                        // HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
                         setLevel_D( level_d);
                         HAL_UART_Transmit(&huart1,&aRxBuffer[5],1, 2);
                     }
                     ledab.RunMode = 0x41;
                 break;
 
-                case 8: //PA11-//SPOT //UV_2 LED-UV275
+                case 3: //PA11-//SPOT //UV_2 LED-UV275
                     ledab.runstep =0x42;
                     HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
                     TurnOff_TheFourthLedD();
@@ -319,7 +256,7 @@ void Order_SideLed(uint8_t orderLed)
                     ledab.RunMode = 0x42;
                 break;
 			
-                case 9: //PC6 -SPOT -RGBW-W
+                case 4: //PC6 -SPOT -RGBW-W
                     ledab.runstep =0x43;
                     HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
                     TurnOff_TheFourthLedD();
@@ -337,7 +274,7 @@ void Order_SideLed(uint8_t orderLed)
                     setLevel_D(level_d);
                 break;
 			  
-			    case 10: //PA8 SPOT --RGBW-R
+			    case 5: //PA8 SPOT --RGBW-R
                     ledab.runstep =0x44;
                     HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
                     TurnOff_TheFourthLedD();
@@ -354,127 +291,8 @@ void Order_SideLed(uint8_t orderLed)
                     setLevel_D(level_d);
 			  
                  break;
-                
-         }
-
-}
-/*************************************************************************************
-**
-  * Function Name:void Spot_SideLed(void)
-  * Function: 
-  * Input Ref: NO
-  * Return Ref:NO
-*
-**************************************************************************************/
-static void Spot_SideLed(void)
-{
-            hasLedOn_spot =1;
-             setLevel();
-            //the second group led follow down "SPORT BOARD"
-               // case 5://RGBW-G //SPOT LED
-                    TurnOff_TheFirstLedA();
-                    HAL_Delay(20);
-                    // ledab.pwmDutyCycle_ch2 = aRxBuffer[6];
-                    //   MX_TIM2_Init();
-                    // HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1); //TIM2_CH1 the second group
-                    //PA15-22PIN--the second group pwm ----Green
-                    setLevel_B(level_b);
-              
-
-                //the third group led 
-              //  case 6://RGBW-B //SPOT //the third group only Pwm control  //PB3 --TIM1-CH2 -AF1
-            
-                    // ledab.pwmDutyCycle_ch3 = aRxBuffer[6];
-                    // MX_TIM1_Init();
-                    // HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2); //TIM1_CH2 PB3 the third group
-                    //PB3-23PIN --the third gropu pwm ---Blue
-                    setLevel_C(level_b);
-              
-
-                //the fourth group led 
-
-             //   case 7: //PB8 //SPOT  //UV310
-                    // ledab.runstep =0x41;
-                    // HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
-            
-                    HAL_Delay(20);
-                    //1.UV_1 LED by control 
-                    if(HAL_GPIO_ReadPin(LEDD2_EN_GPIO_PORT,LEDD2_EN_Pin)==1){//read LEDD2_EN 
-
-                        ledab.runstep =0x4A;
-                        HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
-                        HAL_GPIO_WritePin(GPIOA, LEDD1_Pin , GPIO_PIN_SET); //
-                        HAL_TIM_PWM_Stop(&htim3,TIM_CHANNEL_1) ;
-                    }
-                    else if(HAL_GPIO_ReadPin(LEDD2_EN_GPIO_PORT,LEDD2_EN_Pin)==0){
-                        ledab.runstep =0x4B;
-                        HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2); 
-                        HAL_GPIO_WritePin(LEDD1_GPIO_Port, LEDD1_Pin, GPIO_PIN_RESET); //Low -works
-                        
-                        // ledab.pwmDutyCycle_ch4 = aRxBuffer[6];
-                        // MX_TIM3_Init();
-                        // HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
-                        setLevel_D( level_b);
-                        HAL_UART_Transmit(&huart1,&aRxBuffer[5],1, 2);
-                    }
-                    ledab.RunMode = 0x41;
-             //   break;
-
-              //  case 8: //PA11-//SPOT //UV_2 LED-UV275
-                    // ledab.runstep =0x42;
-                    // HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
-                
-                
-                    HAL_Delay(20);
-
-                    //UV_2 led by control 
-                    if(HAL_GPIO_ReadPin(LEDD2_EN_GPIO_PORT,LEDD2_EN_Pin)==1){
-                            HAL_GPIO_WritePin(GPIOA, LEDD2_Pin , GPIO_PIN_SET); //
-                            HAL_TIM_PWM_Stop(&htim3,TIM_CHANNEL_1) ;
-                    }
-                    else{
-                        HAL_GPIO_WritePin(LEDD2_GPIO_Port, LEDD2_Pin, GPIO_PIN_RESET);
-                        
-                        // ledab.pwmDutyCycle_ch4 = aRxBuffer[6];
-                        // MX_TIM3_Init();
-                        // HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
-                        setLevel_D(level_b);
-                    //HAL_Delay(100);
-                    }
-                    ledab.RunMode = 0x42;
-             //   break;
-			
-              //  case 9: //PC6 -SPOT -RGBW-W
-                    // ledab.runstep =0x43;
-                    // HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
-              
-            
-                    HAL_Delay(20);
-
-                    //turn on LEDB1
-                    HAL_GPIO_WritePin(LEDD3_GPIO_Port, LEDD3_Pin, GPIO_PIN_SET);
-                    //  ledab.pwmDutyCycle_ch4 = aRxBuffer[6];
-                    //  MX_TIM3_Init();
-                    //  HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
-                    setLevel_D(level_b);
-             //   break;
-			  
-			  //  case 10: //PA8 SPOT --RGBW-R
-                    // ledab.runstep =0x44;
-                    // HAL_UART_Transmit(&huart1,&ledab.runstep,1, 2);
-                   
-                    HAL_Delay(20);
-                    //turn on LEDB1
-                    HAL_GPIO_WritePin(LEDD4_GPIO_Port, LEDD4_Pin, GPIO_PIN_SET);
-                    // ledab.pwmDutyCycle_ch4 = aRxBuffer[6];
-                    // MX_TIM3_Init();
-                    // HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
-                    setLevel_D(level_b);
-			     // break;
-                
-
-
-
+        }
+    }
 }
 /*************************************************************************************
 **
@@ -564,15 +382,6 @@ static void Linear_SideLed(uint8_t ledNum)
 
 }
 
-
-void setLevel(void)
-{
-    // setLevel_B(level_a);
-     setLevel_B(level_b);
-     setLevel_C(level_b);
-     setLevel_D(level_b);
-
-}
 /*************************************************************************************
 **
   * Function Name: void setLevel_A(level)
@@ -615,7 +424,7 @@ void setLevel_D(uint8_t level)
 	if(level<LEVEL_MIN) level=LEVEL_MIN;
     ledab.pwmDutyCycle_ch4 = level;//level * LEVEL_PWM_STEP;
    // if(ledab.pwmDutyCycle_ch4> LEVEL_PWM_MAX) ledab.pwmDutyCycle_ch4=LEVEL_PWM_MAX;
-	MX_TIM3_Init();
+   	MX_TIM3_Init();
     HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ; //TIM3_CH1 the fourth group
 
 }
@@ -636,23 +445,23 @@ void AdjustBrigtness_Led(uint8_t bightVal)
 		switch(cmdType){
             case 1 : //0x4F -> "SPOT"board
                     BrightnessWhichOne_Spot(bightVal);
-                    Spot_SideLed();
+                    
             break;
 
             case 2:
                 if((HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_5) ==0) && (classID[1]==1)){ 
                 
                      BrightnessWhichOne_Linear(bightVal);
-                     Linear_SideLed(classID[2]);
+                     
                 }
                 if(HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_5) ==1 && classID[1]==2){ //right side led
                     BrightnessWhichOne_Linear(bightVal);
-                    Linear_SideLed(classID[2]);
+                  
 
                 }
                 if(classID[1]==3){ //both side led  ON
                     BrightnessWhichOne_Linear(bightVal);
-                    Linear_SideLed(classID[2]);
+                   
                 }
             break;
             default :
@@ -669,24 +478,123 @@ void AdjustBrigtness_Led(uint8_t bightVal)
   * Return Ref:NO
 *
 **************************************************************************************/
-void BrightnessWhichOne_Spot(uint8_t val)
+void BrightnessWhichOne_Spot(uint8_t dir)
 {
+    uint8_t val =  classID[3];
     
-      if(val=='1')	// adj +
-		{
+    if(hasLedOn_spot)
+	{
+		switch(val){
+            case 0:
+			if(dir=='1')	// adj +
+			{
 				level_b+=LEVEL_STEP;
 				if(level_b>LEVEL_PWM_MAX ) level_b=LEVEL_PWM_MAX ;
-		}
-		else	// adj -
-        {
-            if(level_b<LEVEL_MIN)	level_b=LEVEL_MIN;
-            else 	level_b-=LEVEL_STEP;
-        }
-       
-        setLevel_B(level_b);
-        setLevel_C(level_b);
-        setLevel_D(level_b);
+			}
+			else	// adj -
+			{
+                if (level_b < LEVEL_MIN)
+                        level_b = LEVEL_MIN;
+                else 	level_b-=LEVEL_STEP;
+			}
+			setLevel_B(level_b);
+		   break;
 
+           case 1:
+            {
+
+            if(dir=='1')	// adj +
+			{
+				level_c+=LEVEL_STEP;
+				if(level_c>LEVEL_PWM_MAX ) level_c=LEVEL_PWM_MAX ;
+			}
+			else	// adj -
+			{
+                if (level_c < LEVEL_MIN)
+                        level_c = LEVEL_MIN;
+                else 	level_c-=LEVEL_STEP;
+			}
+			setLevel_C(level_c);
+
+
+        }
+        break;
+        case 2:
+        {
+            if(dir=='1')	// adj +
+			{
+				level_d+=LEVEL_STEP;
+				if(level_d>LEVEL_PWM_MAX ) level_d=LEVEL_PWM_MAX ;
+			}
+			else	// adj -
+			{
+                if (level_d < LEVEL_MIN)
+                    level_d = LEVEL_MIN;
+                else 	level_d-=LEVEL_STEP;
+			}
+			setLevel_D(level_d);
+
+
+        }
+        break;
+		case 3:
+        {
+			if(dir=='1')	// adj +
+			{
+				level_d+=LEVEL_STEP;
+				if(level_d>LEVEL_PWM_MAX ) level_d=LEVEL_PWM_MAX ;
+			}
+			else	// adj -
+			{
+                if (level_d < LEVEL_MIN)
+                    level_d = LEVEL_MIN;
+                else 	level_d-=LEVEL_STEP;
+			}
+		      setLevel_D(level_d);
+		}
+        break;
+        case 4:
+        {
+            if (dir == '1') // adj +
+            {
+                level_d += LEVEL_STEP;
+                if (level_d > LEVEL_PWM_MAX)
+                    level_d = LEVEL_PWM_MAX;
+            }
+            else // adj -
+            {
+                if (level_d < LEVEL_MIN)
+                    level_d = LEVEL_MIN;
+                else
+                    level_d -= LEVEL_STEP;
+            }
+            setLevel_D(level_d);
+        }
+        break;
+        case 5:
+        {
+            if (dir == '1') // adj +
+            {
+                level_d += LEVEL_STEP;
+                if (level_d > LEVEL_PWM_MAX)
+                    level_d = LEVEL_PWM_MAX;
+            }
+            else // adj -
+            {
+                if (level_d < LEVEL_MIN)
+                    level_d = LEVEL_MIN;
+                else
+                    level_d -= LEVEL_STEP;
+            }
+            setLevel_D(level_d);
+        }
+        break;
+
+        default :
+        break;
+	}
+
+  }
 }
 /*************************************************************************************
 **
@@ -744,7 +652,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	switch(state)
 	{
 	case STATE_PREAMBLE1:
-		if(aRxBuffer[0]=='V' || aRxBuffer[0] =='Z') // hex:56
+		if(aRxBuffer[0]=='V' || aRxBuffer[0] =='Z') // 'V'=hex:56,'Z'=hex:5A
 			state=STATE_PREAMBLE2;
 		break;
 	case STATE_PREAMBLE2:
@@ -756,7 +664,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 			state=STATE_PREAMBLE1;  
 		break;
 	case STATE_ADDR:
-		if(aRxBuffer[0]==BOARD_ADDR) //"L" -0x4C
+		if(aRxBuffer[0]==BOARD_ADDR) // 'L'=deci: 76  "L" = hex:0x4C
 		{
 			state=STATE_CMD; 
 		}

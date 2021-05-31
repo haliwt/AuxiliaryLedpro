@@ -53,14 +53,14 @@ int main(void)
 	MX_TIM3_Init();
   /* USER CODE BEGIN WHILE */
 	HAL_UART_Abort(&huart1);
-	HAL_UART_Receive_IT(&huart1,aRxBuffer, 7);
+	HAL_UART_Receive_IT(&huart1,aRxBuffer, 1);
 	//setLevel(LEVEL_ZERO);
   while (1)
   {
 		
 	  ledab.left_side = ReadLR_Control();
 		DecodeTestCase();
-	  RunModeProcess();
+	  RunModeProcess(); //Run UV310 and UV310 and UV275 LED for magnet on or off
 				
 	}
   

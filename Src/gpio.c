@@ -127,11 +127,11 @@ void MX_GPIO_Init(void)
 ******************************************************************************/
 uint8_t  ReadLR_Control(void)
 {
-        uint8_t tempVal;
+    uint8_t tempVal;
 		tempVal = HAL_GPIO_ReadPin(LEDCON_LR_GPIO_Port,LEDCON_LR_Pin);
-	    if(tempVal == 0 ) return 0;
+	  if(tempVal == 0 ) return 0;
 		else if(tempVal == 1) return 1;
-	  
+	  return tempVal;
 
 }
 

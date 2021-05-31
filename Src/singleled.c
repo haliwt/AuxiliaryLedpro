@@ -21,7 +21,7 @@ static void BlueLed_Off(void);
 ******************************************************************************/
 void SingleLed_Test(void)
 {
-    uint8_t temp;
+  uint8_t temp;
 	uint8_t cmdType_0 = aRxBuffer[0]; //command order 1
 	uint8_t cmdType_1 = aRxBuffer[1]; //command order 1
 	//uint8_t cmdType_2 = aRxBuffer[2];	  //led turn on or off command --main board 
@@ -779,7 +779,7 @@ void RedGreenBlue_LED_Com(void)
 /*************************************************************************
  	*
 	*Function Name: void RunModeProcess(void)
-	*Function : 
+	*Function : UV LED need magnet be used to key on or off
 	*Input Ref: NO
 	*Output Ref:No
 	*
@@ -803,10 +803,7 @@ void RunModeProcess(void)
 
 	 switch(uvVal){
 
-		case 0:
 
-
-		break;
 	
 		case 0x41:
 			//1.UV_1 LED by control 
@@ -820,11 +817,9 @@ void RunModeProcess(void)
 						
 						HAL_GPIO_WritePin(LEDD1_GPIO_Port, LEDD1_Pin, GPIO_PIN_RESET); //Low -works
 						
-						ledab.pwmDutyCycle_ch4 = aRxBuffer[6];
-						MX_TIM3_Init();
-						HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
+						setLevel_D(level_d);
 					}
-				uvVal = 0x42;
+				
 
 		break;
 
@@ -837,13 +832,15 @@ void RunModeProcess(void)
 					else{
 						HAL_GPIO_WritePin(LEDD2_GPIO_Port, LEDD2_Pin, GPIO_PIN_RESET);
 						
-						ledab.pwmDutyCycle_ch4 = aRxBuffer[6];
-						MX_TIM3_Init();
-						HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1) ;
-					//HAL_Delay(100);
+						setLevel_D(level_d);
+					
 					}
-				uvVal= 0x41;
+				
 
 		break;
+		default :
+			
+		break;
+		
 			}
 }
