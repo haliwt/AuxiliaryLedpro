@@ -15,13 +15,14 @@
 #define BUFFER_SIZE     8
 
 extern uint8_t level_d;
+extern uint8_t priority; //WT.EDIT 2021.06.03
 extern uint8_t inputCmd[BUFFER_SIZE];
 
 void setLevel(void);
 
 void DecodeTestCase(void);
 
-
+void TurnOffAll_Led(void);
 void setLevel_A(uint8_t vala);
 void setLevel_B(uint8_t valb);
 void setLevel_C(uint8_t valc);

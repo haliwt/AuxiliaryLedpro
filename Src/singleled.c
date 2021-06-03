@@ -9,7 +9,7 @@ static uint8_t BCC_CHECK(void);
 static void RedLed_Off(void);
 static void GreenLed_Off(void);
 static void BlueLed_Off(void);
- static void UV_Led_Function(uint8_t uvVal);
+static void UV_Led_Function(uint8_t uvVal);
 
 /*************************************************************************
  	*
@@ -786,7 +786,12 @@ void RedGreenBlue_LED_Com(void)
 ******************************************************************************/
 void RunModeProcess(void)
 {
-   if((HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_5) ==0)&&(ledab.led_LR_id  == 1)){
+   if(priority ==5){
+	     priority ++ ;
+		   TurnOffAll_Led();
+	 }
+	
+	if((HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_5) ==0)&&(ledab.led_LR_id  == 1)){
         UV_Led_Function(ledab.RunMode);
    }
    if(HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_5) ==1 && (ledab.led_LR_id  == 2)){
@@ -802,9 +807,6 @@ void RunModeProcess(void)
  {
 
 	 switch(uvVal){
-
-
-	
 		case 0x41:
 			//1.UV_1 LED by control 
 					if(HAL_GPIO_ReadPin(LEDD2_EN_GPIO_PORT,LEDD2_EN_Pin)==1){//read LEDD2_EN 
@@ -819,8 +821,6 @@ void RunModeProcess(void)
 						
 						setLevel_D(level_d);
 					}
-				
-
 		break;
 
 		case 0x42:

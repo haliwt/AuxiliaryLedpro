@@ -38,10 +38,10 @@ static uint8_t level_b;
 static uint8_t level_c;
 
 uint8_t level_d;
-
+uint8_t priority; //WT.EDTI 2021.06.03
 static void RunCmd(void);
 static void SideLed_OnOff(uint8_t ledNum,uint8_t onoff);
-static void TurnOffAll_Led(void);
+
 static void AdjustBrigtness_Led(uint8_t bightVal);
 //static void Order_SideLed(uint8_t orderLed);
 static void Spot_SideLed(uint8_t ledNum,uint8_t onff);
@@ -81,29 +81,33 @@ void RunCmd(void)
     switch(cmdType){
 
         case 'O' : //0x4F -> "SPOT"board
-            classID[0]= 1; //be save sport flag right board
-            classID[3]=(inputCmd[2]-0x30)*10+inputCmd[3]-0x30;
+            classID[0]= 1; //SPOT 
             classID[2]= (inputCmd[2]-0x30)*10+inputCmd[3]-0x30;
+          
             //claseID[2]=ledab.led_LR_id;
             ledab.RunMode = 0;
-            Spot_SideLed(((inputCmd[2]-0x30)*10+inputCmd[3]-0x30),1);
+             priority = 3;
+            Spot_SideLed((classID[2]),1);
         break;
         
         case 'S'://hex:0X56->liner LED
-             classID[0]=2;  //Left board
+             classID[0]=2;  //Linear 
              classID[1]=ledab.led_LR_id;
              classID[2]= (inputCmd[2]-0x30)*10+inputCmd[3]-0x30;
              ledab.RunMode = 0;
-            SideLed_OnOff(((inputCmd[2]-0x30)*10+inputCmd[3]-0x30),1);
+              priority = 2;
+            SideLed_OnOff((classID[2]),1);
         break;
 
         case 'C': 
-					  ledab.RunMode = 0; //WT.EDIT 2021.05.31
+			      ledab.RunMode = 0; //WT.EDIT 2021.05.31
+            priority = 5;  //the most level
             TurnOffAll_Led();
          break;
 
         case 'A'://0X41
-					  ledab.RunMode = 0;
+			ledab.RunMode = 0;
+             priority = 4;
             AdjustBrigtness_Led(inputCmd[1]);
 		    if(classID[0]== 1) cmdType ='O';
 		    if(classID[0]== 2) cmdType ='S';
@@ -180,7 +184,7 @@ static void Spot_SideLed(uint8_t ledNum,uint8_t onoff)
                     TurnOff_TheThirdLedC();
                     TurnOff_TheFourthLedD();
                     TurnOff_TheFirstLedA();
-                    HAL_Delay(20);
+               
                   
                     setLevel_B(level_b);
                 break;
@@ -191,7 +195,7 @@ static void Spot_SideLed(uint8_t ledNum,uint8_t onoff)
                     TurnOff_TheThirdLedC();
                     TurnOff_TheFourthLedD();
                     TurnOff_TheFirstLedA();
-                    HAL_Delay(20);
+                   
                     // ledab.pwmDutyCycle_ch3 = aRxBuffer[6];
                     // MX_TIM1_Init();
                     // HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2); //TIM1_CH2 PB3 the third group
@@ -209,7 +213,6 @@ static void Spot_SideLed(uint8_t ledNum,uint8_t onoff)
                     TurnOff_TheSecondLedB();
                     TurnOff_TheThirdLedC();
             
-                    HAL_Delay(20);
                     //1.UV_1 LED by control 
                     if(HAL_GPIO_ReadPin(LEDD2_EN_GPIO_PORT,LEDD2_EN_Pin)==1){//read LEDD2_EN 
 
@@ -237,7 +240,7 @@ static void Spot_SideLed(uint8_t ledNum,uint8_t onoff)
                     TurnOff_TheSecondLedB();
                     TurnOff_TheThirdLedC();
                 
-                    HAL_Delay(20);
+                
 
                     //UV_2 led by control 
                     if(HAL_GPIO_ReadPin(LEDD2_EN_GPIO_PORT,LEDD2_EN_Pin)==1){
@@ -264,7 +267,7 @@ static void Spot_SideLed(uint8_t ledNum,uint8_t onoff)
                     TurnOff_TheSecondLedB();
                     TurnOff_TheThirdLedC();
             
-                    HAL_Delay(20);
+                 
 
                     //turn on LEDB1
                     HAL_GPIO_WritePin(LEDD3_GPIO_Port, LEDD3_Pin, GPIO_PIN_SET);
@@ -282,7 +285,7 @@ static void Spot_SideLed(uint8_t ledNum,uint8_t onoff)
                     TurnOff_TheSecondLedB();
                     TurnOff_TheThirdLedC();
                 
-                    HAL_Delay(20);
+                  
                     //turn on LEDB1
                     HAL_GPIO_WritePin(LEDD4_GPIO_Port, LEDD4_Pin, GPIO_PIN_SET);
                     // ledab.pwmDutyCycle_ch4 = aRxBuffer[6];
@@ -314,7 +317,7 @@ static void Linear_SideLed(uint8_t ledNum)
 			    TurnOff_TheThirdLedC();
 			    TurnOff_TheFourthLedD();
                 TurnOff_TheFirstLedA();
-				HAL_Delay(20);
+			
 				//1.turn on LEDA1 =1
 			    HAL_GPIO_WritePin(LEDA1_GPIO_Port, LEDA1_Pin, GPIO_PIN_SET);
 			   //2.EN on
@@ -333,7 +336,7 @@ static void Linear_SideLed(uint8_t ledNum)
 			    TurnOff_TheThirdLedC();
 			    TurnOff_TheFourthLedD();
 				TurnOff_TheFirstLedA();
-				HAL_Delay(20);
+			
                 //turn on LEDA2  
                 HAL_GPIO_WritePin(LEDA2_GPIO_Port, LEDA2_Pin, GPIO_PIN_SET);
 				//  ledab.pwmDutyCycle_ch1 = aRxBuffer[6] ;
@@ -349,7 +352,7 @@ static void Linear_SideLed(uint8_t ledNum)
 			    TurnOff_TheThirdLedC();
 			    TurnOff_TheFourthLedD();
 				TurnOff_TheFirstLedA();
-				HAL_Delay(20);
+			
                 //turn on LEDA3
                 HAL_GPIO_WritePin(LEDA3_GPIO_Port, LEDA3_Pin, GPIO_PIN_SET);
 				//  ledab.pwmDutyCycle_ch1 = aRxBuffer[6] ;
@@ -366,7 +369,7 @@ static void Linear_SideLed(uint8_t ledNum)
 			    TurnOff_TheThirdLedC();
 			    TurnOff_TheFourthLedD();
 				TurnOff_TheFirstLedA();
-				HAL_Delay(20);
+			
                 //turn on LEDA4
                 HAL_GPIO_WritePin(LEDA4_GPIO_Port, LEDA4_Pin, GPIO_PIN_SET);
 				//  ledab.pwmDutyCycle_ch1 = aRxBuffer[6];
@@ -637,6 +640,7 @@ void TurnOffAll_Led(void)
     TurnOff_TheThirdLedC();
     TurnOff_TheFourthLedD();
     TurnOff_TheFirstLedA();
+    HAL_Delay(200); //WT.EDIT 2021.06.03
 }
 /*************************************************************************************
 **
